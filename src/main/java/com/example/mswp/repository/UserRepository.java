@@ -6,9 +6,10 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 
-   Optional<User> findById(String id);
+
 @Repository
 public interface UserRepository extends JpaRepository<User, String> {
     User findByIdAndPassword(String id, String password);
+    Optional<User> findById(String id);
 
 }
