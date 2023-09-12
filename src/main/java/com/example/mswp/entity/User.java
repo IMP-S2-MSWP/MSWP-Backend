@@ -1,7 +1,10 @@
 package com.example.mswp.entity;
 
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
 import lombok.*;
 
 @Entity // Class 위 선언하여 해당 Class가 Entity임을 알려줌, JPA에서 정의된 Field를 바탕으로 DB에 Table 생성
@@ -12,22 +15,16 @@ import lombok.*;
 @ToString // 해당 Class에 선언된 Field를 모두 출력할 수 있는 toString() 자동 생성
 public class User {
 
-    @Id //기본키를 의미. 반드시 기본키를 가져야함.
-    @Column(name = "id", length = 64)
+
+    @Id // Entity의 PK가 될 Value 지정, 만약 @GeneratedValue 사용 시 auto_incresment 사용 가능
+    @Column(length = 20, nullable = false) // VARCHAR 길이(String Type에서만 사용 가능), null 허용 여부
+
     private String id;
 
     @Column(length = 60, nullable = false)
     private String password;
 
     @Column(length = 12, nullable = false)
-    private String nickname;
-
-    /*@Builder
-    public User(String id,String password, String nickname) {
-        this.id = id;
-        this.password = password;
-        this.nickname = nickname;
-    }*/
-
+    private  String nickname;
 
 }

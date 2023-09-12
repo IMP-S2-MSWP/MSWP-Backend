@@ -1,8 +1,10 @@
 package com.example.mswp.dto;
 
+
+import com.example.mswp.entity.User;
 import lombok.Getter;
 import lombok.Setter;
-import com.example.mswp.entity.User;
+
 
 @Getter
 @Setter
@@ -20,7 +22,6 @@ public class UserDto {
                 */
                 User user = new User(this.id,this.password,this.nickname);
                 return user;
-        }
-        
-        
+        }   
+
 }
