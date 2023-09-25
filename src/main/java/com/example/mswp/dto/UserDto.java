@@ -5,6 +5,9 @@ import com.example.mswp.entity.User;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Date;
+import java.util.List;
+
 
 @Getter
 @Setter
@@ -12,16 +15,27 @@ public class UserDto {
         
         private String id;
         private String password;
+        private String name;
         private String nickname;
-        
+        private Date birth;
+        private Character gender;
+        private String bluetooth;
+
+
+        //여러 아이디 받기 위함 (bluetooth id 기반 사용자 닉네임 제공)
+        private List<String> bluetoothList;
+
         public User toEntity() {
-                /* @AllArgsConstructor 이랑 builder가 겹쳐서 에러남
-                User user = User.builder().id(this.id)
-                        .password(this.password)
-                        .nickname(this.nickname).build();
-                */
-                User user = new User(this.id,this.password,this.nickname);
-                return user;
+                //@AllArgsConstructor 이랑 builder 겹쳐서 에러남
+                return User.builder()
+                        .id(id)
+                        .password(password)
+                        .name(name)
+                        .nickname(nickname)
+                        .birth(birth)
+                        .gender(gender)
+                        .bluetooth(bluetooth)
+                        .build();
         }   
 
 }

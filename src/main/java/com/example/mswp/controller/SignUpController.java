@@ -22,7 +22,7 @@ public class SignUpController {
     @PostMapping ("/register")
     public Map SignUpMethod(@RequestBody UserDto userDto) {
         Map<String, Object> response = new HashMap<>();
-        String result = this.signUpService.SignUpMethod(userDto);
+        String result = signUpService.SignUpMethod(userDto);
         response.put("sc",result);
 
         return response;

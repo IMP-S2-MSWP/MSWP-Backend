@@ -31,12 +31,12 @@ public class SignUpService {
         String response = "400";
 
         //유저 id가 db에 있는지 확인
-        if (userTest.isEmpty()){
+        if (userTest.isEmpty()) {
             User newUser = userDto.toEntity();
             userRepository.save(newUser);
             response = "200";
         }
-      return response;
-    };
+        return response;
+    }
 
 }

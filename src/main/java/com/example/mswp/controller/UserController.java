@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.swing.text.html.Option;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 
@@ -32,6 +33,11 @@ public class UserController {
     @PostMapping("/info")
     public Optional<UserMapping> info(@RequestBody UserDto userDto) {
         return userService.loadUser(userDto);
+    }
+
+    @PostMapping("/around")
+    public Map aroundUser(@RequestBody UserDto userDto) {
+        return userService.findUserByBluetooth(userDto);
     }
 
 }
