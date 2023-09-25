@@ -24,10 +24,6 @@ public class UserController {
     private UserService userService;
 
     private Logger logger = LoggerFactory.getLogger(UserController.class);
-    @GetMapping("/test")
-    public String test() {
-        return "Success!";
-    }
 
     @PostMapping("/login")
     public Optional<User> login(@RequestBody UserDto userDto) {
@@ -54,7 +50,16 @@ public class UserController {
         responsedata.put("sc",result);
 
         return responsedata;
+    }
 
+    @PostMapping("/bluetooth")
+    public Map<String, Integer> insertBluetooth(@RequestBody UserDto userDto) {
+        return userService.insertBluetooth(userDto);
+    }
+
+    @PostMapping("/login/validation")
+    public Map<String, Integer> loginValidation(@RequestBody UserDto userDto) {
+        return userService.loginValidation(userDto);
     }
 
 }

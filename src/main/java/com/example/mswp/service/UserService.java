@@ -4,6 +4,7 @@ import com.example.mswp.dto.UserDto;
 import com.example.mswp.entity.User;
 import com.example.mswp.mapping.UserMapping;
 import com.example.mswp.repository.UserRepository;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -70,6 +71,43 @@ public class UserService {
             response = "200";
         }
         return response;
-    };
+    }
+
+    public Map<String, Integer> insertBluetooth(UserDto userDto) {
+
+        //상태 코드 res
+        Map<String, Integer> res = new HashMap<>();
+        //user 찾기
+        Optional<User> user = userRepository.findById(userDto.getId());
+        // 상태 코드 변수
+        int sc = user.isPresent() ? 200 : 400;
+
+        if (user.isPresent()) {
+            user.get().setBluetooth(userDto.getBluetooth());
+            userRepository.save(user.get());
+            res.put("sc", sc);
+        } else {
+            res.put("sc", sc);
+        }
+
+        return res;
+    }
+
+    public Map<String, Integer> loginValidation(UserDto userDto) {
+        //상태 코드 res
+        Map<String, Integer> res = new HashMap<>();
+        // 중복 ID 찾기
+        Optional<User> user = userRepository.findById(userDto.getId());
+        // 상태 코드 변수
+        int sc = user.isPresent() ? 400 : 200;
+
+        if(user.isPresent()) {
+            res.put("sc", sc);
+        } else {
+            res.put("sc", sc);
+        }
+
+        return res;
+    }
 
 }

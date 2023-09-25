@@ -16,6 +16,7 @@ import java.util.Date;
 @AllArgsConstructor // 선언된 모든 Field를 Parameter로 갖는 생성자 자동 생성
 @NoArgsConstructor // Parameter가 없는 Basic 생성자 자동 생성
 @Getter // 각 Field의 Value를 조회할 수 있는 Getter 자동 생성
+@Setter
 @ToString // 해당 Class에 선언된 Field를 모두 출력할 수 있는 toString() 자동 생성
 public class User {
 
@@ -43,4 +44,5 @@ public class User {
 
     @Column(length = 36)
     private String bluetooth;
+
 }
