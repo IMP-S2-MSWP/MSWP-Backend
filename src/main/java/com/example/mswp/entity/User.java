@@ -34,7 +34,7 @@ public class User {
     @Column(length = 12, nullable = false)
     private String nickname;
 
-    @Column(columnDefinition = "DATE DEFAULT CURRENT_DATE")
+    @Column(columnDefinition = "DATE")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-mm-dd")
     private Date birth;
 
