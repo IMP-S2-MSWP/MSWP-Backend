@@ -4,6 +4,6 @@ public interface UserMapping {
 
     String getId();
     String getNickname();
-
+    String getBluetooth();
 
 }

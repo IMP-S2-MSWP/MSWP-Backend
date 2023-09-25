@@ -1,0 +1,23 @@
+2023-09-25 18:32:14.403 [http-nio-8080-exec-3] DEBUG o.a.coyote.http11.Http11InputBuffer - Before fill(): parsingHeader: [true], parsingRequestLine: [true], parsingRequestLinePhase: [0], parsingRequestLineStart: [0], byteBuffer.position(): [0], byteBuffer.limit(): [0], end: [0]
+2023-09-25 18:32:14.403 [http-nio-8080-exec-1] DEBUG o.a.coyote.http11.Http11InputBuffer - Before fill(): parsingHeader: [true], parsingRequestLine: [true], parsingRequestLinePhase: [0], parsingRequestLineStart: [0], byteBuffer.position(): [0], byteBuffer.limit(): [0], end: [0]
+2023-09-25 18:32:14.404 [http-nio-8080-exec-1] DEBUG o.a.coyote.http11.Http11InputBuffer - Received [POST /api/register HTTP/1.1
+Content-Type: application/json
+User-Agent: PostmanRuntime/7.33.0
+Accept: */*
+Postman-Token: d1f2bf87-7468-4eaf-bd56-5738fa732948
+Host: localhost:8080
+Accept-Encoding: gzip, deflate, br
+Connection: keep-alive
+Content-Length: 178
+
+{
+    "id" : "zxcv",
+    "password" : "zxcv",
+    "name" : "íì¤í¸2",
+    "nickname" : "zxcv",
+    "birth" : "2000-03-03",
+    "gender" : "W",
+    "bluetooth" : null
+}]
+2023-09-25 18:32:14.739 [http-nio-8080-exec-1] DEBUG o.a.coyote.http11.Http11InputBuffer - Before fill(): parsingHeader: [true], parsingRequestLine: [true], parsingRequestLinePhase: [0], parsingRequestLineStart: [0], byteBuffer.position(): [0], byteBuffer.limit(): [0], end: [267]
+2023-09-25 18:32:14.739 [http-nio-8080-exec-1] DEBUG o.a.coyote.http11.Http11InputBuffer - Received []

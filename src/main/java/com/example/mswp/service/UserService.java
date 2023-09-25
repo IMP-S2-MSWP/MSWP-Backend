@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 
@@ -40,6 +42,17 @@ public class UserService {
     //Password를 제외한 사용자 data 추출
     public Optional<UserMapping> loadUser(UserDto userDto) {
         return userRepository.findAllById(userDto.getId());
+    }
+
+    //bluetooth id로 주변 사용자 nickname 조회
+    public Map findUserByBluetooth(UserDto userDto) {
+        Map<String, Object> user = new HashMap<>();
+
+        for (int i = 0; i < userDto.getBluetoothList().size(); i++) {
+            user.put(String.valueOf(i), userRepository.findUserByBluetooth(userDto.getBluetoothList().get(i)));
+        }
+
+        return user;
     }
 
     public String SignUpMethod(UserDto userDto){
