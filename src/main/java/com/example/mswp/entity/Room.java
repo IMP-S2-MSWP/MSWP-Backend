@@ -1,5 +1,6 @@
 package com.example.mswp.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,7 +16,7 @@ public class Room {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "sequence")
+    @JsonIgnore
     private int sequence;
 
     @Column(nullable = false)

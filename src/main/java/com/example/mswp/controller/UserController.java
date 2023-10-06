@@ -9,11 +9,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
 import org.slf4j.Logger;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @RestController
@@ -27,17 +29,22 @@ public class UserController {
 
     @PostMapping("/login")
     public Optional<User> login(@RequestBody UserDto userDto) {
-        return userService.findByIdAndPassword(userDto);
+        return userService.login(userDto);
     }
 
-    @PostMapping("/info")
-    public Optional<UserMapping> info(@RequestBody UserDto userDto) {
-        return userService.loadUser(userDto);
+    @PostMapping("/register/validation")
+    public Map<String, Integer> idValidation(@RequestBody UserDto userDto) {
+        return userService.idValidation(userDto);
+    }
+
+    @PostMapping("/my-page")
+    public Optional<User> myPage(@RequestBody UserDto userDto) {
+        return userService.myPage(userDto);
     }
 
     @PostMapping("/around")
     public Map aroundUser(@RequestBody UserDto userDto) {
-        return userService.findUserByBluetooth(userDto);
+        return userService.findUserByUuid(userDto);
     }
 
     @PostMapping ("/register")
@@ -52,14 +59,15 @@ public class UserController {
         return responsedata;
     }
 
-    @PostMapping("/bluetooth")
-    public Map<String, Integer> insertBluetooth(@RequestBody UserDto userDto) {
-        return userService.insertBluetooth(userDto);
+//    @PostMapping("/bluetooth")
+//    public Map<String, Integer> insertBluetooth(@RequestBody UserDto userDto) {
+//        return userService.insertUuid(userDto);
+//    }
+
+    @PostMapping("/upload")
+    public Map uploadImage(@RequestParam("id") String id, @RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
+        return userService.uploadImage(id, file);
     }
 
-    @PostMapping("/login/validation")
-    public Map<String, Integer> loginValidation(@RequestBody UserDto userDto) {
-        return userService.loginValidation(userDto);
-    }
 
 }

@@ -19,11 +19,11 @@ public class UserDto {
         private String nickname;
         private Date birth;
         private Character gender;
-        private String bluetooth;
+        private String uuid;
+        private String image;
 
-
-        //여러 아이디 받기 위함 (bluetooth id 기반 사용자 닉네임 제공)
-        private List<String> bluetoothList;
+        //여러 아이디 받기 위함 (uuid 기반 사용자 닉네임 제공)
+        private List<String> uuidList;
 
         public User toEntity() {
                 //@AllArgsConstructor 이랑 builder 겹쳐서 에러남
@@ -34,7 +34,8 @@ public class UserDto {
                         .nickname(nickname)
                         .birth(birth)
                         .gender(gender)
-                        .bluetooth(bluetooth)
+                        .uuid(uuid)
+                        .image(image)
                         .build();
         }   
 
