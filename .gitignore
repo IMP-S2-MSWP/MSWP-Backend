@@ -40,3 +40,6 @@ out/
 .jpg
 .png
 .jpeg
+
+### log file ###
+.log
