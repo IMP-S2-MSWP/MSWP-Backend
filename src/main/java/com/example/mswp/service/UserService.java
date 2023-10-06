@@ -9,11 +9,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.nio.file.attribute.FileAttribute;
+import java.util.*;
 
 
 @Service
@@ -26,7 +31,7 @@ public class UserService {
     private final BCryptPasswordEncoder passwordEncoder;
 
     //ID, Password data로 사용자 데이터 추출
-    public Optional<User> findByIdAndPassword(UserDto userDto) {
+    public Optional<User> login(UserDto userDto) {
 
         //ID 값으로 user data 추출
         Optional<User> user = userRepository.findById(userDto.getId());
@@ -41,22 +46,25 @@ public class UserService {
     }
 
     //Password를 제외한 사용자 data 추출
-    public Optional<UserMapping> loadUser(UserDto userDto) {
-        return userRepository.findAllById(userDto.getId());
+    public Optional<User> myPage(UserDto userDto) {
+        return userRepository.findById(userDto.getId());
     }
 
     //bluetooth id로 주변 사용자 nickname 조회
-    public Map findUserByBluetooth(UserDto userDto) {
+    public Map findUserByUuid(UserDto userDto) {
         Map<String, Object> user = new HashMap<>();
 
-        for (int i = 0; i < userDto.getBluetoothList().size(); i++) {
-            user.put(String.valueOf(i), userRepository.findUserByBluetooth(userDto.getBluetoothList().get(i)));
+        for (int i = 0; i < userDto.getUuidList().size(); i++) {
+            user.put(String.valueOf(i), userRepository.findUserByUuid(userDto.getUuidList().get(i)));
         }
 
         return user;
     }
 
     public String SignUpMethod(UserDto userDto){
+
+        StringBuilder uuid = new StringBuilder();
+
         //패스워드 암호화
         userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
         // 아이디 찾는 메소드
@@ -64,47 +72,80 @@ public class UserService {
 
         String response = "400";
 
+        uuid.append(UUID.randomUUID());
+        System.out.println(uuid);
+        uuid.replace(0, 3, "bc2");
+        System.out.println(uuid);
+
         //유저 id가 db에 있는지 확인
         if (userTest.isEmpty()){
             User newUser = userDto.toEntity();
+            newUser.setUuid(uuid.toString());
+            newUser.setImage("no_image.png");
             userRepository.save(newUser);
             response = "200";
         }
         return response;
     }
 
-    public Map<String, Integer> insertBluetooth(UserDto userDto) {
+    //uuid 기기 등록
+//    public Map<String, Integer> insertUuid(UserDto userDto) {
+//
+//
+//
+//        //상태 코드 res
+//        Map<String, Integer> res = new HashMap<>();
+//        //user 찾기
+//        Optional<User> user = userRepository.findById(userDto.getId());
+//        // 상태 코드 변수
+//        int sc = user.isPresent() ? 200 : 400;
+//
+//
+//
+//        if (user.isPresent()) {
+//            //user.get().setUuid(uuid.toString());
+//            //userRepository.save(user.get());
+//            res.put("sc", sc);
+//        } else {
+//            res.put("sc", sc);
+//        }
+//
+//        return res;
+//    }
 
-        //상태 코드 res
-        Map<String, Integer> res = new HashMap<>();
-        //user 찾기
-        Optional<User> user = userRepository.findById(userDto.getId());
-        // 상태 코드 변수
-        int sc = user.isPresent() ? 200 : 400;
-
-        if (user.isPresent()) {
-            user.get().setBluetooth(userDto.getBluetooth());
-            userRepository.save(user.get());
-            res.put("sc", sc);
-        } else {
-            res.put("sc", sc);
-        }
-
-        return res;
-    }
-
-    public Map<String, Integer> loginValidation(UserDto userDto) {
+    //아이디 중복 확인
+    public Map<String, Integer> idValidation(UserDto userDto) {
         //상태 코드 res
         Map<String, Integer> res = new HashMap<>();
         // 중복 ID 찾기
         Optional<User> user = userRepository.findById(userDto.getId());
-        // 상태 코드 변수
-        int sc = user.isPresent() ? 400 : 200;
+
+        res.put("sc", user.isPresent() ? 400 : 200);
+
+        return res;
+    }
+
+    // 사용자 이미지 변경
+    public Map uploadImage(String id, MultipartFile file) throws IOException {
+
+        Map<String, Integer> res = new HashMap<>();
+
+        // 기존 파일명 -> 사용자 ID로 변경하기 위함
+        String originalFilename = file.getOriginalFilename().replace(file.getOriginalFilename(), id + ".jpg");
+
+        Path filePath = Paths.get(".\\src\\main\\resources\\static\\images\\", originalFilename);
+
+        Files.createDirectories(filePath.getParent());
+        Files.write(filePath, file.getBytes());
+
+        Optional<User> user = userRepository.findById(id);
 
         if(user.isPresent()) {
-            res.put("sc", sc);
+            user.get().setImage(originalFilename);
+            userRepository.save(user.get());
+            res.put("sc", 200);
         } else {
-            res.put("sc", sc);
+            res.put("sc", 400);
         }
 
         return res;

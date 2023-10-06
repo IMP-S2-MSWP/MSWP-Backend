@@ -11,15 +11,15 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/room")
 public class RoomController {
 
     @Autowired
     private RoomService roomService;
 
-    @PostMapping("/room")
+    @PostMapping("/list")
     public List<Room> roomList(@RequestBody RoomDto roomDto) {
-        return roomService.loadRoom(roomDto);
+        return roomService.roomList(roomDto);
     }
 
     @PostMapping("/create")

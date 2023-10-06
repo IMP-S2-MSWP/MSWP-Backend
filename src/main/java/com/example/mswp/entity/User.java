@@ -20,7 +20,7 @@ import java.util.Date;
 @ToString // 해당 Class에 선언된 Field를 모두 출력할 수 있는 toString() 자동 생성
 public class User {
 
-    @Id // Entity의 PK가 될 Value 지정, 만약 @GeneratedValue 사용 시 auto_incresment 사용 가능
+    @Id // Entity의 PK가 될 Value 지정, 만약 @GeneratedValue 사용 시 auto_increment 사용 가능
     @Column(length = 20, nullable = false) // VARCHAR 길이(String Type에서만 사용 가능), null 허용 여부
     @NotBlank // null, "", " " 허용 X
     private String id;
@@ -36,13 +36,17 @@ public class User {
     private String nickname;
 
     @Column(columnDefinition = "DATE")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-mm-dd")
     private Date birth;
 
     @Column
     private Character gender;
 
-    @Column(length = 36)
-    private String bluetooth;
+    @Column(length = 50)
+    private String uuid;
 
+    @Column(length = 30)
+    private String image;
+
+    @Column(length = 60)
+    private String message;
 }
