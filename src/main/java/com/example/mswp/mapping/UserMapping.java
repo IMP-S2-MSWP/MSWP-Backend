@@ -6,6 +6,6 @@ public interface UserMapping {
     String getNickname();
     String getUuid();
     String getImage();
-//    String getMessage();
+    String getMessage();
 
 }
