@@ -2,32 +2,25 @@ package com.example.mswp.service;
 
 import com.example.mswp.dto.UserDto;
 import com.example.mswp.entity.User;
-import com.example.mswp.mapping.UserMapping;
 import com.example.mswp.repository.UserRepository;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.nio.file.attribute.FileAttribute;
-import java.util.*;
 
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
-    @Autowired
     private final UserRepository userRepository;
-    @Autowired
+
     private final BCryptPasswordEncoder passwordEncoder;
 
     //ID, Password data로 사용자 데이터 추출
@@ -35,9 +28,9 @@ public class UserService {
 
         //ID 값으로 user data 추출
         Optional<User> user = userRepository.findById(userDto.getId());
-        
+
         //user data 내 암호화된 Password와 사용자가 입력한 Password를 디코딩하여 비교
-        if(user.isPresent() && passwordEncoder.matches(userDto.getPassword(), user.get().getPassword())) {
+        if (user.isPresent() && passwordEncoder.matches(userDto.getPassword(), user.get().getPassword())) {
             return user;
         } else {
             return Optional.empty();
@@ -51,17 +44,23 @@ public class UserService {
     }
 
     //bluetooth id로 주변 사용자 nickname 조회
-    public Map findUserByUuid(UserDto userDto) {
-        Map<String, Object> user = new HashMap<>();
+    public Map<Object, Object> around(UserDto userDto) {
+        Map<Object, Object> user = new HashMap<>();
 
         for (int i = 0; i < userDto.getUuidList().size(); i++) {
-            user.put(String.valueOf(i), userRepository.findUserByUuid(userDto.getUuidList().get(i)));
+            user.put(Integer.parseInt(String.valueOf(i)) + 1, userRepository.findUserByUuid(userDto.getUuidList().get(i)));
+        }
+
+        if(user.isEmpty()) {
+            user.put("sc", 400);
+        } else {
+            user.put("sc", 200);
         }
 
         return user;
     }
 
-    public String SignUpMethod(UserDto userDto){
+    public String register(UserDto userDto) {
 
         StringBuilder uuid = new StringBuilder();
 
@@ -73,45 +72,20 @@ public class UserService {
         String response = "400";
 
         uuid.append(UUID.randomUUID());
-        System.out.println(uuid);
         uuid.replace(0, 3, "bc2");
-        System.out.println(uuid);
+
 
         //유저 id가 db에 있는지 확인
-        if (userTest.isEmpty()){
+        if (userTest.isEmpty()) {
             User newUser = userDto.toEntity();
             newUser.setUuid(uuid.toString());
-            newUser.setImage("no_image.png");
+            newUser.setImage("no_image.jpg");
             userRepository.save(newUser);
             response = "200";
         }
+
         return response;
     }
-
-    //uuid 기기 등록
-//    public Map<String, Integer> insertUuid(UserDto userDto) {
-//
-//
-//
-//        //상태 코드 res
-//        Map<String, Integer> res = new HashMap<>();
-//        //user 찾기
-//        Optional<User> user = userRepository.findById(userDto.getId());
-//        // 상태 코드 변수
-//        int sc = user.isPresent() ? 200 : 400;
-//
-//
-//
-//        if (user.isPresent()) {
-//            //user.get().setUuid(uuid.toString());
-//            //userRepository.save(user.get());
-//            res.put("sc", sc);
-//        } else {
-//            res.put("sc", sc);
-//        }
-//
-//        return res;
-//    }
 
     //아이디 중복 확인
     public Map<String, Integer> idValidation(UserDto userDto) {
@@ -140,7 +114,7 @@ public class UserService {
 
         Optional<User> user = userRepository.findById(id);
 
-        if(user.isPresent()) {
+        if (user.isPresent()) {
             user.get().setImage(originalFilename);
             userRepository.save(user.get());
             res.put("sc", 200);
