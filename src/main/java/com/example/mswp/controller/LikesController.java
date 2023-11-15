@@ -14,6 +14,7 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("/api")
+@CrossOrigin(origins = "*")
 public class LikesController {
 
     @Autowired
