@@ -2,7 +2,8 @@ package com.example.mswp.service;
 
 import com.example.mswp.dto.UserDto;
 import com.example.mswp.entity.User;
-import com.example.mswp.repository.UserRepository;
+import com.example.mswp.repository.JpaLikesRepository;
+import com.example.mswp.repository.JpaUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,15 +20,14 @@ import java.util.*;
 @RequiredArgsConstructor
 public class UserService {
 
-    private final UserRepository userRepository;
-
+    private final JpaUserRepository jpaUserRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
     //ID, Password data로 사용자 데이터 추출
     public Optional<User> login(UserDto userDto) {
 
         //ID 값으로 user data 추출
-        Optional<User> user = userRepository.findById(userDto.getId());
+        Optional<User> user = jpaUserRepository.findById(userDto.getId());
 
         //user data 내 암호화된 Password와 사용자가 입력한 Password를 디코딩하여 비교
         if (user.isPresent() && passwordEncoder.matches(userDto.getPassword(), user.get().getPassword())) {
@@ -39,8 +39,9 @@ public class UserService {
     }
 
     //Password를 제외한 사용자 data 추출
-    public Optional<User> myPage(UserDto userDto) {
-        return userRepository.findById(userDto.getId());
+    public Optional<User> main(UserDto userDto) {
+
+        return jpaUserRepository.findById(userDto.getId());
     }
 
     //bluetooth id로 주변 사용자 nickname 조회
@@ -48,7 +49,7 @@ public class UserService {
         Map<Object, Object> user = new HashMap<>();
 
         for (int i = 0; i < userDto.getUuidList().size(); i++) {
-            user.put(Integer.parseInt(String.valueOf(i)) + 1, userRepository.findUserByUuid(userDto.getUuidList().get(i)));
+            user.put(Integer.parseInt(String.valueOf(i)) + 1, jpaUserRepository.findUserByUuid(userDto.getUuidList().get(i)));
         }
 
         if(user.isEmpty()) {
@@ -67,7 +68,7 @@ public class UserService {
         //패스워드 암호화
         userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
         // 아이디 찾는 메소드
-        Optional<User> userTest = userRepository.findById(userDto.getId());
+        Optional<User> userTest = jpaUserRepository.findById(userDto.getId());
 
         String response = "400";
 
@@ -80,7 +81,7 @@ public class UserService {
             User newUser = userDto.toEntity();
             newUser.setUuid(uuid.toString());
             newUser.setImage("no_image.jpg");
-            userRepository.save(newUser);
+            jpaUserRepository.save(newUser);
             response = "200";
         }
 
@@ -92,7 +93,7 @@ public class UserService {
         //상태 코드 res
         Map<String, Integer> res = new HashMap<>();
         // 중복 ID 찾기
-        Optional<User> user = userRepository.findById(userDto.getId());
+        Optional<User> user = jpaUserRepository.findById(userDto.getId());
 
         res.put("sc", user.isPresent() ? 400 : 200);
 
@@ -112,11 +113,11 @@ public class UserService {
         Files.createDirectories(filePath.getParent());
         Files.write(filePath, file.getBytes());
 
-        Optional<User> user = userRepository.findById(id);
+        Optional<User> user = jpaUserRepository.findById(id);
 
         if (user.isPresent()) {
             user.get().setImage(originalFilename);
-            userRepository.save(user.get());
+            jpaUserRepository.save(user.get());
             res.put("sc", 200);
         } else {
             res.put("sc", 400);
