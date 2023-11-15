@@ -21,6 +21,7 @@ public class UserDto {
         private Character gender;
         private String uuid;
         private String image;
+        private String message;
 
         //여러 아이디 받기 위함 (uuid 기반 사용자 닉네임 제공)
         private List<String> uuidList;
@@ -36,6 +37,7 @@ public class UserDto {
                         .gender(gender)
                         .uuid(uuid)
                         .image(image)
+                        .message(message)
                         .build();
         }   
 
