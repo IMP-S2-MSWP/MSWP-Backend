@@ -5,16 +5,17 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.List;
-
+import java.sql.Timestamp;
 @Getter
 @Setter
 public class RoomDto {
 
     private int sequence;
-    private int number;
+    private String number;
     private String id;
-
+    private Character state;
     //상태 코드
     private int sc;
     //여러 아이디 받기 위함
@@ -25,6 +26,8 @@ public class RoomDto {
         return Room.builder()
                 .id(idList.get(i))
                 .number(number)
+                .state(state)
+                .create_at(LocalDateTime.now())
                 .build();
     }
 
