@@ -12,6 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 @Service
 @RequiredArgsConstructor
 public class RoomService {
@@ -27,59 +30,58 @@ public class RoomService {
 
     // 사용자 id 기준 접속 가능한 방 목록
     public List<Room> roomList(RoomDto roomDto) {
-
-        return jpaRoomRepository.getById(roomDto.getId());
+        List<Room> roomlist = jpaRoomRepository.getById(roomDto.getId());
+        for (int i = 0 ; i < roomlist.size();i++){
+            System.out.println(roomlist.get(i).getNumber());
+        }
+        return jpaRoomRepository.getByIdAndState(roomDto.getId(),roomDto.getState());
 
     }
 
     // 채팅방 생성
     @Transactional
     public Map createRoom(RoomDto roomDto) {
+        List<String> roomId = jpaRoomRepository.findRoomNumbersWithBothUsers(roomDto.getIdList());
+        if (roomId.size() == 0){
 
-        //성공
-        if(roomDto.getSc() == 200) {
-            //방 번호 Front에서 주는 거 저장하는 코드로 수정
-            if(!roomDto.getIdList().isEmpty() || roomDto.getIdList().size() == 1) {
 
-                for(int i = 0; i < roomDto.getIdList().size(); i++) {
+            LocalDate now = LocalDate.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy@MM@dd");
+            String formatedNow = now.format(formatter);
+            formatedNow = formatedNow.concat("@");
 
-                    if(jpaUserRepository.findById(roomDto.getIdList().get(i)).equals(Optional.empty())) {
-                        res.put("sc", 400);
-                        return res;
-                    }
-                }
 
-                if(jpaRoomRepository.findMaxNumber() == null) {
-                    number = 1;
-                } else {
-                    number = jpaRoomRepository.findMaxNumber() + 1;
-                }
-
-                for (int i = 0; i < roomDto.getIdList().size(); i++) {
-                    roomDto.setNumber(number);
-                    Room room = roomDto.toEntity(i);
-                    jpaRoomRepository.save(room);
-                }
-
-                res.put("sc", 200);
-                res.put("number", number);
-                res.put("idList", roomDto.getIdList());
-
-                return res;
-
-            } else {
-                return Collections.emptyMap();
+            for (int i = 0; i < roomDto.getIdList().size(); i++) {
+                formatedNow = formatedNow.concat(roomDto.getIdList().get(i));
             }
-        } else {
-            deleteRoom();
-            res.put("sc", 400);
+
+            roomDto.setNumber(formatedNow);
+            for (int i = 0; i < roomDto.getIdList().size(); i++){
+
+                Room room = roomDto.toEntity(i);
+                jpaRoomRepository.save(room);
+            }
+
+            String orderUser = jpaRoomRepository.findIdsByNumberAndNotUserId(formatedNow,roomDto.getIdList().get(0));
+            res.put("sc",201);
+            res.put("number",formatedNow);
+            res.put("orderUser",orderUser);
             return res;
         }
+        else {
+            String orderUser = jpaRoomRepository.findIdsByNumberAndNotUserId(roomId.get(0),roomDto.getIdList().get(0));
+            System.out.println(orderUser);
+            res.put("sc",200);
+            res.put("number",roomId.get(0));
+            res.put("orderUser",orderUser);
+            return res;
+        }
+
 
     }
 
     @Transactional // 여러 데이터베이스 연산을 하나의 논리적인 작업 단위로 묶음 (일관성 유지 위함)
     public void deleteRoom() {
-        jpaRoomRepository.deleteByNumber(number);
+        jpaRoomRepository.deleteByNumber("test");
     }
 }
