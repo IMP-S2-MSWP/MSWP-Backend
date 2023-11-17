@@ -1,10 +1,8 @@
 package com.example.mswp.controller;
 
-import com.example.mswp.dto.LikesDto;
+
 import com.example.mswp.dto.UserDto;
-import com.example.mswp.entity.Likes;
 import com.example.mswp.entity.User;
-import com.example.mswp.service.LikesService;
 import com.example.mswp.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.LoggerFactory;

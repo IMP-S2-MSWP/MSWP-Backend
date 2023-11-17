@@ -1,14 +1,13 @@
 package com.example.mswp.dto;
+
 import com.example.mswp.entity.Beacon;
-import com.example.mswp.entity.Room;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.sql.Timestamp;
+
 @Getter
 @Setter
 public class BeaconDto {

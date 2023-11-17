@@ -2,7 +2,6 @@ package com.example.mswp.service;
 
 import com.example.mswp.dto.UserDto;
 import com.example.mswp.entity.User;
-import com.example.mswp.repository.JpaLikesRepository;
 import com.example.mswp.repository.JpaUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

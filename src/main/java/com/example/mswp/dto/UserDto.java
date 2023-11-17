@@ -1,13 +1,11 @@
 package com.example.mswp.dto;
 
-
 import com.example.mswp.entity.User;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
 import java.util.List;
-
 
 @Getter
 @Setter

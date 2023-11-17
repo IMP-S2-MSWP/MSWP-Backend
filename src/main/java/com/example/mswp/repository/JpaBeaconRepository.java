@@ -1,7 +1,9 @@
 package com.example.mswp.repository;
-import com.example.mswp.entity.Beacon;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
+import com.example.mswp.entity.Beacon;
 
 import java.util.List;
 
