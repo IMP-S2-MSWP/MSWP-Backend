@@ -5,12 +5,14 @@ import com.example.mswp.entity.Room;
 import com.example.mswp.entity.Beacon;
 import com.example.mswp.repository.JpaBeaconRepository;
 import com.example.mswp.dto.RoomDto;
-import java.util.*;
-
 import com.example.mswp.repository.JpaRoomRepository;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -22,23 +24,26 @@ public class BeaconService {
     private final JpaRoomRepository jpaRoomRepository;
     Map<String, Object> res = new HashMap<>();
     public Map createBeacon(BeaconDto beaconDto){
+
         Beacon beacon = jpaBeaconRepository.findUserByUuid(beaconDto.getUuid());
 
-        if(beacon ==null){
+        if(beacon == null){
             beacon = beaconDto.toEntity();
             jpaBeaconRepository.save(beacon);
             res.put("sc","200");
         }
-        else{ //이미 해당 uuid가 등록되어있음
+        //이미 해당 uuid가 등록되어 있음
+        else {
             res.put("sc","400");
         }
         return res;
-    };
+    }
 
     //완
     public List<Beacon> myBeaconList (BeaconDto beaconDto){
         return jpaBeaconRepository.getById(beaconDto.getId());
-    };
+    }
+
     public List<Room> beaconList(BeaconDto beaconDto) {
         return jpaRoomRepository.getByIdAndState(beaconDto.getId(),beaconDto.getState());
     }
@@ -59,6 +64,7 @@ public class BeaconService {
 
         return beacon;
     }
+
     public Map joinBeacon(BeaconDto beaconDto){
         Room room = jpaRoomRepository.findByNumberAndId(beaconDto.getUuid(),beaconDto.getId());
         if(room == null){
@@ -77,22 +83,21 @@ public class BeaconService {
             res.put("number",beaconDto.getUuid());
         }
         else{
-            System.out.println(room.toString());
             res.put("sc","200");
             res.put("state",beaconDto.getState());
             res.put("number",beaconDto.getUuid());
         }
         return res;
-    };
+    }
+
     public Map deleteBeacon(BeaconDto beaconDto){
         res.put("sc","200");
         return res;
-    };
+    }
 
     public Map updateBeacon(BeaconDto beaconDto){
         res.put("sc","200");
         return res;
-    };
-
+    }
 
 }

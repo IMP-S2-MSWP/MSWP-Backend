@@ -1,14 +1,13 @@
 package com.example.mswp.dto;
+
 import com.example.mswp.entity.Beacon;
-import com.example.mswp.entity.Room;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.sql.Timestamp;
+
 @Getter
 @Setter
 public class BeaconDto {
@@ -19,6 +18,7 @@ public class BeaconDto {
     private String message;
     private String image;
     private String beaconname;
+    private Character gender;
 
     private List<String> uuidList;
     @Builder
@@ -30,6 +30,7 @@ public class BeaconDto {
                 .message(message)
                 .image(image)
                 .beaconname(beaconname)
+                .gender(gender)
                 .create_at(LocalDateTime.now())
                 .build();
     }

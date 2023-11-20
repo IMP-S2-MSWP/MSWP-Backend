@@ -4,7 +4,10 @@ import com.example.mswp.dto.LikesDto;
 import com.example.mswp.dto.UserDto;
 import com.example.mswp.entity.Likes;
 import com.example.mswp.repository.JpaLikesRepository;
+
+import com.example.mswp.repository.JpaUserRepository;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
 import org.springframework.stereotype.Service;
@@ -19,6 +22,7 @@ import java.util.concurrent.TimeUnit;
 public class LikesService {
 
     private final JpaLikesRepository jpalikesRepository;
+    private final JpaUserRepository jpaUserRepository;
     private final RedisTemplate<String, String> redisTemplate;
 
     @Transactional
@@ -88,6 +92,22 @@ public class LikesService {
         }
 
         return members;
+    }
+
+    public Map<Object, Object> likeMe(String id) {
+        Map<Object, Object> res = new HashMap<>();
+
+        List<Likes> user = jpalikesRepository.findByIdToAndExpiredAtIsNull(id);
+
+        if(user.isEmpty()) {
+            return null;
+        } else {
+            for(int i = 0; i < user.size(); i++) {
+                res.put(i, jpaUserRepository.findById(user.get(i).getIdFrom()));
+            }
+        }
+
+        return res;
     }
 
 }

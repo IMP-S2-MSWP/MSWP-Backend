@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import java.sql.Timestamp;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -21,19 +21,19 @@ public class Room {
     @JsonIgnore
     private int sequence;
 
-    @Column(length = 45,nullable = false)
+    @Column(length = 45, nullable = false)
     private String number;
 
     @Column(length = 20, nullable = false)
     private String id;
 
-    @Column(nullable = true)
+    @Column
     private Character state;
 
     @Column(name = "create_at", columnDefinition = "TIMESTAMP")
     private LocalDateTime create_at;
 
-    @Column(name = "expried_at", columnDefinition = "TIMESTAMP")
-    private LocalDateTime expried_at;
+    @Column(name = "expired_at", columnDefinition = "TIMESTAMP")
+    private LocalDateTime expired_at;
 
 }

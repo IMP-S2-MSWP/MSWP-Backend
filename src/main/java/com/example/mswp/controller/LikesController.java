@@ -35,4 +35,9 @@ public class LikesController {
     public Set<String> test(@RequestBody UserDto userDto) {
         return likesService.test(userDto);
     }
+
+    @GetMapping("/list")
+    public Map<Object, Object> likeMe(@RequestParam String id) {
+        return likesService.likeMe(id);
+    }
 }
