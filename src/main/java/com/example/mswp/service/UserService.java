@@ -2,6 +2,7 @@ package com.example.mswp.service;
 
 import com.example.mswp.dto.UserDto;
 import com.example.mswp.entity.User;
+import com.example.mswp.repository.JpaBeaconRepository;
 import com.example.mswp.repository.JpaUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,6 +21,7 @@ import java.util.*;
 public class UserService {
 
     private final JpaUserRepository jpaUserRepository;
+    private final JpaBeaconRepository jpaBeaconRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
     //ID, Password data로 사용자 데이터 추출
@@ -48,7 +50,11 @@ public class UserService {
         Map<Object, Object> user = new HashMap<>();
 
         for (int i = 0; i < userDto.getUuidList().size(); i++) {
-            user.put(Integer.parseInt(String.valueOf(i)) + 1, jpaUserRepository.findUserByUuid(userDto.getUuidList().get(i)));
+            if (userDto.getUuidList().get(i).startsWith("bc2")) {
+                user.put(Integer.parseInt(String.valueOf(i)) + 1, jpaUserRepository.findUserByUuid(userDto.getUuidList().get(i)));
+            } else {
+                user.put(Integer.parseInt(String.valueOf(i)) + 1, jpaBeaconRepository.findUserByUuid(userDto.getUuidList().get(i)));
+            }
         }
 
         if(user.isEmpty()) {

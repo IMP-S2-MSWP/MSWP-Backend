@@ -18,6 +18,7 @@ public class BeaconDto {
     private String message;
     private String image;
     private String beaconname;
+    private Character gender;
 
     private List<String> uuidList;
     @Builder
@@ -29,6 +30,7 @@ public class BeaconDto {
                 .message(message)
                 .image(image)
                 .beaconname(beaconname)
+                .gender(gender)
                 .create_at(LocalDateTime.now())
                 .build();
     }

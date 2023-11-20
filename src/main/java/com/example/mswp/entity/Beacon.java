@@ -26,20 +26,24 @@ public class Beacon {
     @Column(length = 50)
     private String id;
 
-    @Column()
+    @Column
     private Character state;
+
     @Column(length = 60)
     private String message;
 
-    @Column(length = 255)
+    @Column
     private String image;
 
     @Column(length = 60)
     private String beaconname;
 
+    @Column
+    private Character gender;
+
     @Column(name = "create_at", columnDefinition = "TIMESTAMP")
     private LocalDateTime create_at;
 
-    @Column(name = "expried_at", columnDefinition = "TIMESTAMP")
-    private LocalDateTime expried_at;
+    @Column(name = "expired_at", columnDefinition = "TIMESTAMP")
+    private LocalDateTime expired_at;
 }
