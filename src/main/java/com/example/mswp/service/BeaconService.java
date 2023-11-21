@@ -24,10 +24,11 @@ public class BeaconService {
     private final JpaRoomRepository jpaRoomRepository;
     Map<String, Object> res = new HashMap<>();
     public Map createBeacon(BeaconDto beaconDto){
-
+        System.out.println(beaconDto.getUuid());
         Beacon beacon = jpaBeaconRepository.findUserByUuid(beaconDto.getUuid());
 
         if(beacon == null){
+            beaconDto.setImage("no_beacon_image.jpg");
             beacon = beaconDto.toEntity();
             jpaBeaconRepository.save(beacon);
             res.put("sc","200");
@@ -44,8 +45,10 @@ public class BeaconService {
         return jpaBeaconRepository.getById(beaconDto.getId());
     }
 
-    public List<Room> beaconList(BeaconDto beaconDto) {
-        return jpaRoomRepository.getByIdAndState(beaconDto.getId(),beaconDto.getState());
+    public List<Beacon> beaconList(BeaconDto beaconDto) {
+        List<Beacon> test = jpaBeaconRepository.findBeaconsByRoomIdAndState(beaconDto.getId(),beaconDto.getState());
+        return test;
+        //return jpaRoomRepository.getByIdAndState(beaconDto.getId(),beaconDto.getState());
     }
 
     //얼츄완료
@@ -90,13 +93,23 @@ public class BeaconService {
         return res;
     }
 
+    //아직 안만듬
     public Map deleteBeacon(BeaconDto beaconDto){
         res.put("sc","200");
         return res;
     }
 
     public Map updateBeacon(BeaconDto beaconDto){
-        res.put("sc","200");
+        Beacon test = jpaBeaconRepository.findUserByUuid(beaconDto.getUuid());
+        if (test == null){
+
+            res.put("sc","400");
+        }
+        else {
+            jpaBeaconRepository.save(beaconDto.toEntity());
+            res.put("sc","200");
+        }
+
         return res;
     }
 

@@ -29,7 +29,7 @@ public class BeaconController {
     }
 
     @PostMapping("/beaconlist")
-    public List<Room> beaconList (@RequestBody BeaconDto beaconDto){
+    public List<Beacon> beaconList (@RequestBody BeaconDto beaconDto){
         return beaconService.beaconList(beaconDto);
     }
 
@@ -46,5 +46,10 @@ public class BeaconController {
     @PostMapping("/join")
     public Map joinBeacon(@RequestBody BeaconDto beaconDto){
         return beaconService.joinBeacon(beaconDto);
+    };
+
+    @PostMapping("/update")
+    public Map updateBeacon(@RequestBody BeaconDto beaconDto){
+        return beaconService.updateBeacon(beaconDto);
     };
 }
