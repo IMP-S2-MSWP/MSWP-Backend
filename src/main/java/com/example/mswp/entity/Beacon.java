@@ -15,12 +15,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 public class Beacon {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonIgnore
-    private int sequence;
 
-    @Column(length = 50)
+    @Id
+    @Column(length = 50, nullable = false)
     private String uuid;
 
     @Column(length = 50)
