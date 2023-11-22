@@ -5,8 +5,11 @@ import com.example.mswp.entity.Beacon;
 import com.example.mswp.entity.Room;
 import com.example.mswp.service.BeaconService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -18,9 +21,17 @@ public class BeaconController {
     @Autowired
     private BeaconService beaconService;
 
-    @PostMapping("/create")
-    public Map createBeacon(@RequestBody BeaconDto beaconDto){
-        return beaconService.createBeacon(beaconDto);
+    @PostMapping(value = "/create", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public Map createBeacon(@RequestParam("uuid") String uuid,
+                            @RequestParam("creator") String creator,
+                            @RequestParam("state") Character state,
+                            @RequestParam("message") String message,
+                            @RequestParam("beaconname") String beaconname,
+                            @RequestParam("gender") Character gender,
+                            @RequestParam("file") MultipartFile file
+                            ) throws IOException {
+        System.out.println(file);
+        return beaconService.createBeacon(uuid, creator, state, message, beaconname, gender, file);
     }
 
     @PostMapping("/mybeacon")
@@ -47,4 +58,9 @@ public class BeaconController {
     public Map joinBeacon(@RequestBody BeaconDto beaconDto){
         return beaconService.joinBeacon(beaconDto);
     };
+
+    @PostMapping("upload")
+    public Map uploadImage(@RequestParam("uuid") String uuid, @RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
+        return beaconService.uploadImage(uuid, file);
+    }
 }

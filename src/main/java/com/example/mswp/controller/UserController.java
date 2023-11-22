@@ -7,6 +7,7 @@ import com.example.mswp.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -58,9 +59,14 @@ public class UserController {
         return map;
     }
 
-    @PostMapping("/upload")
+    @PostMapping(value = "/upload", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public Map uploadImage(@RequestParam("id") String id, @RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
         return userService.uploadImage(id, file);
+    }
+
+    @PostMapping("/change")
+    public Map<String, Integer> changeMessage(@RequestBody UserDto userDto) {
+        return userService.changeMessage(userDto);
     }
 
 }

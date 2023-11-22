@@ -1,6 +1,7 @@
 package com.example.mswp.dto;
 
 import com.example.mswp.entity.Beacon;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,7 +14,7 @@ import java.util.List;
 public class BeaconDto {
 
     private String uuid;
-    private String id;
+    private String creator;
     private Character state;
     private String message;
     private String image;
@@ -21,11 +22,11 @@ public class BeaconDto {
     private Character gender;
 
     private List<String> uuidList;
-    @Builder
+
     public Beacon toEntity() {
         return Beacon.builder()
                 .uuid(uuid)
-                .id(id)
+                .creator(creator)
                 .state(state)
                 .message(message)
                 .image(image)
