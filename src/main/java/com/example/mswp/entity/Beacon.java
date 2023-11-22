@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 public class Beacon {
 
     @Id
-    @Column(length = 50)
+    @Column(length = 50, nullable = false)
     private String uuid;
 
     @Column(length = 50)

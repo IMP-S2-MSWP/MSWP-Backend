@@ -40,7 +40,7 @@ public class BeaconController {
     }
 
     @PostMapping("/beaconlist")
-    public List<Room> beaconList (@RequestBody BeaconDto beaconDto){
+    public List<Beacon> beaconList (@RequestBody BeaconDto beaconDto){
         return beaconService.beaconList(beaconDto);
     }
 
@@ -63,4 +63,10 @@ public class BeaconController {
     public Map uploadImage(@RequestParam("uuid") String uuid, @RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
         return beaconService.uploadImage(uuid, file);
     }
+
+    @PostMapping("/update")
+    public Map updateBeacon(@RequestBody BeaconDto beaconDto){
+        return beaconService.updateBeacon(beaconDto);
+    };
+
 }
