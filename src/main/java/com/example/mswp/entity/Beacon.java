@@ -2,10 +2,7 @@ package com.example.mswp.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -14,6 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Setter
 public class Beacon {
 
     @Id
@@ -21,7 +19,7 @@ public class Beacon {
     private String uuid;
 
     @Column(length = 50)
-    private String id;
+    private String creator;
 
     @Column
     private Character state;

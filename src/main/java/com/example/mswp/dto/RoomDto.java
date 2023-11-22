@@ -16,8 +16,6 @@ public class RoomDto {
     private String number;
     private String id;
     private Character state;
-    //상태 코드
-    private int sc;
     //여러 아이디 받기 위함
     private List<String> idList;
 

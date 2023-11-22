@@ -7,14 +7,20 @@ import org.springframework.stereotype.Repository;
 import com.example.mswp.entity.Beacon;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
-public interface JpaBeaconRepository extends JpaRepository<Beacon, Integer> {
-    List<Beacon> getById(String user);
+public interface JpaBeaconRepository extends JpaRepository<Beacon, String> {
+    //Beacon getById(String user);
+
+    List<Beacon> findByCreator(String creator);
 
     Beacon findUserByUuid(String uuid);
+
+    Optional<Beacon> findByUuid(String uuid);
 
     //test
     @Query("SELECT b FROM Beacon b WHERE b.uuid IN (SELECT a.number  FROM Room a WHERE a.id = :roomId AND a.state = :state)")
     List<Beacon> findBeaconsByRoomIdAndState(String roomId,Character state);
+
 }

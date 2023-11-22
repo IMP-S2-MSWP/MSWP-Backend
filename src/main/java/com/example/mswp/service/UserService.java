@@ -73,19 +73,18 @@ public class UserService {
         //패스워드 암호화
         userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
         // 아이디 찾는 메소드
-        Optional<User> userTest = jpaUserRepository.findById(userDto.getId());
+        Optional<User> user = jpaUserRepository.findById(userDto.getId());
 
         String response = "400";
 
         uuid.append(UUID.randomUUID());
         uuid.replace(0, 3, "bc2");
 
-
         //유저 id가 db에 있는지 확인
-        if (userTest.isEmpty()) {
+        if (user.isEmpty()) {
             User newUser = userDto.toEntity();
-            newUser.setUuid(uuid.toString());
             newUser.setImage("no_image.jpg");
+            newUser.setUuid(uuid.toString());
             jpaUserRepository.save(newUser);
             response = "200";
         }
@@ -113,7 +112,7 @@ public class UserService {
         // 기존 파일명 -> 사용자 ID로 변경하기 위함
         String originalFilename = file.getOriginalFilename().replace(file.getOriginalFilename(), id + ".jpg");
 
-        Path filePath = Paths.get(".\\src\\main\\resources\\static\\images\\", originalFilename);
+        Path filePath = Paths.get(".\\src\\main\\resources\\static\\images\\user\\", originalFilename);
 
         Files.createDirectories(filePath.getParent());
         Files.write(filePath, file.getBytes());
@@ -123,6 +122,23 @@ public class UserService {
         if (user.isPresent()) {
             user.get().setImage(originalFilename);
             jpaUserRepository.save(user.get());
+            res.put("sc", 200);
+        } else {
+            res.put("sc", 400);
+        }
+
+        return res;
+    }
+
+    public Map<String, Integer> changeMessage(UserDto userDto) {
+
+        Map<String, Integer> res = new HashMap<>();
+
+        User user = jpaUserRepository.findById(userDto.getId()).orElse(null);
+
+        if(user != null) {
+            user.setMessage(userDto.getMessage());
+            jpaUserRepository.save(user);
             res.put("sc", 200);
         } else {
             res.put("sc", 400);

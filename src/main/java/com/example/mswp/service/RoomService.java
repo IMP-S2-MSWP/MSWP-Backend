@@ -44,7 +44,6 @@ public class RoomService {
         List<String> roomId = jpaRoomRepository.findRoomNumbersWithBothUsers(roomDto.getIdList());
         if (roomId.size() == 0){
 
-
             LocalDate now = LocalDate.now();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy@MM@dd");
             String formatedNow = now.format(formatter);

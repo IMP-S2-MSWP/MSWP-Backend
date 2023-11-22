@@ -9,20 +9,56 @@ import com.example.mswp.repository.JpaRoomRepository;
 
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 @Service
 @RequiredArgsConstructor
 public class BeaconService {
 
-    @Autowired
     private final JpaBeaconRepository jpaBeaconRepository;
-    @Autowired
     private final JpaRoomRepository jpaRoomRepository;
+
     Map<String, Object> res = new HashMap<>();
+
+    public Map createBeacon(String uuid,
+                            String creator,
+                            Character state,
+                            String message,
+                            String beaconname,
+                            Character gender,
+                            MultipartFile file) throws IOException {
+
+        Beacon beacon = jpaBeaconRepository.findUserByUuid(uuid);
+
+        if(beacon == null){
+            // 기존 파일명 -> 사용자 ID로 변경하기 위함
+            String originalFilename = file.getOriginalFilename().replace(file.getOriginalFilename(), uuid + ".jpg");
+
+            Path filePath = Paths.get(".\\src\\main\\resources\\static\\images\\beacon\\", originalFilename);
+
+            Files.createDirectories(filePath.getParent());
+            Files.write(filePath, file.getBytes());
+
+            BeaconDto beaconDto = new BeaconDto();
+
+            beaconDto.setUuid(uuid);
+            beaconDto.setCreator(creator);
+            beaconDto.setState(state);
+            beaconDto.setMessage(message);
+            beaconDto.setImage(originalFilename);
+            beaconDto.setBeaconname(beaconname);
+            beaconDto.setGender(gender);
+
+            jpaBeaconRepository.save(beaconDto.toEntity());
+            res.put("sc",200);
+
     public Map createBeacon(BeaconDto beaconDto){
         System.out.println(beaconDto.getUuid());
         Beacon beacon = jpaBeaconRepository.findUserByUuid(beaconDto.getUuid());
@@ -32,18 +68,20 @@ public class BeaconService {
             beacon = beaconDto.toEntity();
             jpaBeaconRepository.save(beacon);
             res.put("sc","200");
+
         }
         //이미 해당 uuid가 등록되어 있음
         else {
-            res.put("sc","400");
+            res.put("sc",400);
         }
         return res;
     }
 
     //완
     public List<Beacon> myBeaconList (BeaconDto beaconDto){
-        return jpaBeaconRepository.getById(beaconDto.getId());
+        return jpaBeaconRepository.findByCreator(beaconDto.getCreator());
     }
+
 
     public List<Beacon> beaconList(BeaconDto beaconDto) {
         List<Beacon> test = jpaBeaconRepository.findBeaconsByRoomIdAndState(beaconDto.getId(),beaconDto.getState());
@@ -69,13 +107,13 @@ public class BeaconService {
     }
 
     public Map joinBeacon(BeaconDto beaconDto){
-        Room room = jpaRoomRepository.findByNumberAndId(beaconDto.getUuid(),beaconDto.getId());
+        Room room = jpaRoomRepository.findByNumberAndId(beaconDto.getUuid(),beaconDto.getCreator());
         if(room == null){
             List<String> myList = new ArrayList<>();
-            myList.add(beaconDto.getId());
+            myList.add(beaconDto.getCreator());
             RoomDto roomDto = new RoomDto();
             roomDto.setNumber(beaconDto.getUuid());
-            roomDto.setId(beaconDto.getId());
+            roomDto.setId(beaconDto.getCreator());
             roomDto.setIdList(myList);
             roomDto.setState(beaconDto.getState());
 
@@ -111,6 +149,32 @@ public class BeaconService {
         }
 
         return res;
+    }
+
+    public Map uploadImage(String uuid, MultipartFile file) throws IOException {
+
+        Map<String, Integer> res = new HashMap<>();
+
+        // 기존 파일명 -> 사용자 ID로 변경하기 위함
+        String originalFilename = file.getOriginalFilename().replace(file.getOriginalFilename(), uuid + ".jpg");
+
+        Path filePath = Paths.get(".\\src\\main\\resources\\static\\images\\", originalFilename);
+
+        Files.createDirectories(filePath.getParent());
+        Files.write(filePath, file.getBytes());
+
+        Optional<Beacon> beacon = jpaBeaconRepository.findByUuid(uuid);
+
+        if (beacon.isPresent()) {
+            beacon.get().setImage(originalFilename);
+            jpaBeaconRepository.save(beacon.get());
+            res.put("sc", 200);
+        } else {
+            res.put("sc", 400);
+        }
+
+        return res;
+
     }
 
 }

@@ -19,10 +19,10 @@ public interface JpaRoomRepository extends JpaRepository<Room, Integer> {
     Integer findMaxNumber();
 
     void deleteByNumber(String number);
-    @Query("SELECT number FROM Room  WHERE id IN :ids AND state = '1' GROUP BY number HAVING COUNT(id) = 2")
+    @Query("SELECT number FROM Room WHERE id IN :ids AND state = '1' GROUP BY number HAVING COUNT(id) = 2")
     List<String> findRoomNumbersWithBothUsers(List<String> ids);
 
-    @Query("SELECT id FROM Room  WHERE number = :number AND id != :userId")
+    @Query("SELECT id FROM Room WHERE number = :number AND id != :userId")
     String findIdsByNumberAndNotUserId(String number, String userId);
 
 
