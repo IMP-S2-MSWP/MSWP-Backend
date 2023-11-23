@@ -2,7 +2,6 @@ package com.example.mswp.dto;
 
 import com.example.mswp.entity.Beacon;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 

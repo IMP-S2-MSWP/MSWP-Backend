@@ -37,7 +37,7 @@ public class BeaconService {
 
         Beacon beacon = jpaBeaconRepository.findUserByUuid(uuid);
 
-        if(beacon == null){
+        if (beacon == null) {
             // 기존 파일명 -> 사용자 ID로 변경하기 위함
             String originalFilename = file.getOriginalFilename().replace(file.getOriginalFilename(), uuid + ".jpg");
 
@@ -57,34 +57,19 @@ public class BeaconService {
             beaconDto.setGender(gender);
 
             jpaBeaconRepository.save(beaconDto.toEntity());
-            res.put("sc",200);
-
-    public Map createBeacon(BeaconDto beaconDto){
-        System.out.println(beaconDto.getUuid());
-        Beacon beacon = jpaBeaconRepository.findUserByUuid(beaconDto.getUuid());
-
-        if(beacon == null){
-            beaconDto.setImage("no_beacon_image.jpg");
-            beacon = beaconDto.toEntity();
-            jpaBeaconRepository.save(beacon);
-            res.put("sc","200");
-
-        }
-        //이미 해당 uuid가 등록되어 있음
-        else {
-            res.put("sc",400);
+            res.put("sc", 200);
+        } else {
+            res.put("sc", 400);
         }
         return res;
     }
-
-    //완
-    public List<Beacon> myBeaconList (BeaconDto beaconDto){
+    public List<Beacon> myBeaconList (BeaconDto beaconDto) {
         return jpaBeaconRepository.findByCreator(beaconDto.getCreator());
     }
 
 
     public List<Beacon> beaconList(BeaconDto beaconDto) {
-        List<Beacon> test = jpaBeaconRepository.findBeaconsByRoomIdAndState(beaconDto.getId(),beaconDto.getState());
+        List<Beacon> test = jpaBeaconRepository.findBeaconsByRoomIdAndState(beaconDto.getCreator(),beaconDto.getState());
         return test;
         //return jpaRoomRepository.getByIdAndState(beaconDto.getId(),beaconDto.getState());
     }
