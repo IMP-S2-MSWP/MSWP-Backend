@@ -34,7 +34,7 @@ public class RoomService {
         for (int i = 0 ; i < roomlist.size();i++){
             System.out.println(roomlist.get(i).getNumber());
         }
-        return jpaRoomRepository.getByIdAndState(roomDto.getId(),roomDto.getState());
+        return jpaRoomRepository.findByIdAndState(roomDto.getId(),roomDto.getState());
 
     }
 
@@ -64,7 +64,7 @@ public class RoomService {
             String orderUser = jpaRoomRepository.findIdsByNumberAndNotUserId(formatedNow,roomDto.getIdList().get(0));
             res.put("sc",201);
             res.put("number",formatedNow);
-            res.put("orderUser",orderUser);
+            res.put("rname",orderUser);
             return res;
         }
         else {
@@ -72,7 +72,7 @@ public class RoomService {
             System.out.println(orderUser);
             res.put("sc",200);
             res.put("number",roomId.get(0));
-            res.put("orderUser",orderUser);
+            res.put("rname",orderUser);
             return res;
         }
 

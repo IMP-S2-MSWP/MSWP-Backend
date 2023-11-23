@@ -4,7 +4,6 @@ package com.example.mswp.controller;
 import com.example.mswp.dto.UserDto;
 import com.example.mswp.entity.User;
 import com.example.mswp.service.UserService;
-import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -50,7 +49,7 @@ public class UserController {
     }
 
     @PostMapping ("/register")
-    public Map register(HttpServletRequest request, @RequestBody UserDto userDto) {
+    public Map register(@RequestBody UserDto userDto) {
         Map<String, Object> map = new HashMap<>();
 
         String result = userService.register(userDto);
