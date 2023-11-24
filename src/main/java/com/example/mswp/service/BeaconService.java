@@ -22,6 +22,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class BeaconService {
 
+    private final S3Service s3Service;
     private final JpaBeaconRepository jpaBeaconRepository;
     private final JpaRoomRepository jpaRoomRepository;
 
@@ -40,11 +41,8 @@ public class BeaconService {
         if (beacon == null) {
             // 기존 파일명 -> 사용자 ID로 변경하기 위함
             String originalFilename = file.getOriginalFilename().replace(file.getOriginalFilename(), uuid + ".jpg");
+            s3Service.saveFile(uuid, "beacon", file);
 
-            Path filePath = Paths.get(".\\src\\main\\resources\\static\\images\\beacon\\", originalFilename);
-
-            Files.createDirectories(filePath.getParent());
-            Files.write(filePath, file.getBytes());
 
             BeaconDto beaconDto = new BeaconDto();
 
