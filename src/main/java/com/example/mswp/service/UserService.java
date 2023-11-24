@@ -10,9 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import java.util.*;
 
@@ -20,6 +17,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class UserService {
 
+    private final S3Service s3Service;
     private final JpaUserRepository jpaUserRepository;
     private final JpaBeaconRepository jpaBeaconRepository;
     private final BCryptPasswordEncoder passwordEncoder;
@@ -109,17 +107,12 @@ public class UserService {
 
         Map<String, Integer> res = new HashMap<>();
 
-        // 기존 파일명 -> 사용자 ID로 변경하기 위함
-        String originalFilename = file.getOriginalFilename().replace(file.getOriginalFilename(), id + ".jpg");
-
-        Path filePath = Paths.get(".\\src\\main\\resources\\static\\images\\user\\", originalFilename);
-
-        Files.createDirectories(filePath.getParent());
-        Files.write(filePath, file.getBytes());
-
         Optional<User> user = jpaUserRepository.findById(id);
 
         if (user.isPresent()) {
+            // 기존 파일명 -> 사용자 ID로 변경하기 위함
+            String originalFilename = file.getOriginalFilename().replace(file.getOriginalFilename(), id + ".jpg");
+            s3Service.saveFile(id, "user", file);
             user.get().setImage(originalFilename);
             jpaUserRepository.save(user.get());
             res.put("sc", 200);
