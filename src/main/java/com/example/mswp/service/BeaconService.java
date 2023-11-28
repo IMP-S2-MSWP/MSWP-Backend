@@ -33,19 +33,11 @@ public class BeaconService {
                             Character gender,
                             MultipartFile file) throws IOException {
 
-        String extension;
-
-        if(file.getContentType().equals("image/png")) {
-            extension = ".png";
-        } else {
-            extension = ".jpg";
-        }
-
         Beacon beacon = jpaBeaconRepository.findUserByUuid(uuid);
 
         if (beacon == null) {
             // 기존 파일명 -> 사용자 ID로 변경하기 위함
-            String originalFilename = file.getOriginalFilename().replace(file.getOriginalFilename(), uuid + extension);
+            String originalFilename = file.getOriginalFilename().replace(file.getOriginalFilename(), uuid + ".jpg");
             s3Service.saveFile(uuid, "beacon", file);
 
             BeaconDto beaconDto = new BeaconDto();
@@ -139,19 +131,11 @@ public class BeaconService {
 
     public Map<String, Object> createAdvertisement(String uuid, String title, MultipartFile file) throws IOException {
 
-        String extension;
-
-        if(file.getContentType().equals("image/png")) {
-            extension = ".png";
-        } else {
-            extension = ".jpg";
-        }
-
         Beacon beacon = jpaBeaconRepository.findUserByUuid(uuid);
 
         if (beacon != null) {
             // 기존 파일명 -> 사용자 ID로 변경하기 위함
-            String originalFilename = file.getOriginalFilename().replace(file.getOriginalFilename(), uuid + extension);
+            String originalFilename = file.getOriginalFilename().replace(file.getOriginalFilename(), uuid + ".jpg");
             s3Service.saveFile(uuid, "advertisement", file);
 
             beacon.updateAdvertisementImage(title, originalFilename);

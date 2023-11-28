@@ -2,6 +2,7 @@ package com.example.mswp.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.example.mswp.entity.Beacon;
@@ -21,6 +22,6 @@ public interface JpaBeaconRepository extends JpaRepository<Beacon, String> {
 
     //test
     @Query("SELECT b FROM Beacon b WHERE b.uuid IN (SELECT a.number  FROM Room a WHERE a.id = :id AND a.state = :state)")
-    List<Beacon> findBeaconsByRoomIdAndState(String id,Character state);
+    List<Beacon> findBeaconsByRoomIdAndState(@Param("id")String id, @Param("state")Character state);
 
 }
