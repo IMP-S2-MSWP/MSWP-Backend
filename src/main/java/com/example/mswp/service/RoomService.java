@@ -22,11 +22,13 @@ public class RoomService {
 
     @Autowired
     private final JpaRoomRepository jpaRoomRepository;
+    @Autowired
+    private final JpaUserRepository jpaUserRepository;
     Map<String, Object> res = new HashMap<>();
 
     // 사용자 id 기준 접속 가능한 방 목록
     public List<RoomListDto> roomList(RoomDto roomDto) {
-        List<Room> roomlist = jpaRoomRepository.getById(roomDto.getId());
+        List<Room> roomlist = jpaRoomRepository.findByIdAndState(roomDto.getId(), roomDto.getState());
         List<String> testlist = new ArrayList<>();
         for (int i = 0 ; i < roomlist.size();i++){
             testlist.add(roomlist.get(i).getNumber());
