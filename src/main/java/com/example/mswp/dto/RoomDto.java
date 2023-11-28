@@ -19,6 +19,9 @@ public class RoomDto {
     //여러 아이디 받기 위함
     private List<String> idList;
 
+    private String rname;
+
+
     @Builder
     public Room toEntity(int i) {
         return Room.builder()
@@ -26,6 +29,7 @@ public class RoomDto {
                 .number(number)
                 .state(state)
                 .create_at(LocalDateTime.now())
+                .update_at(LocalDateTime.now())
                 .build();
     }
 
