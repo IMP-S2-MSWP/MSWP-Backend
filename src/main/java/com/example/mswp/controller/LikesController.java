@@ -13,7 +13,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/like")
 @CrossOrigin(origins = "*")
 public class LikesController {
 
@@ -22,22 +22,22 @@ public class LikesController {
 
 
     @PostMapping("/click")
-    public Optional<Likes> clickLike(@RequestBody LikesDto likesDto) {
-        return likesService.clickLike(likesDto);
+    public Optional<Likes> click(@RequestBody LikesDto likesDto) {
+        return likesService.click(likesDto);
     }
 
     @GetMapping("/count")
-    public Map<String, List<Object>> countLike(@RequestParam String id) {
-        return likesService.countLike(id);
+    public Map<String, List<Likes>> count(@RequestParam String id) {
+        return likesService.count(id);
     }
 
-    @PostMapping("/test")
-    public Set<String> test(@RequestBody UserDto userDto) {
-        return likesService.test(userDto);
+    @PostMapping("/me")
+    public Set<String> me(@RequestBody UserDto userDto) {
+        return likesService.me(userDto);
     }
 
     @GetMapping("/list")
-    public Map<Object, Object> likeMe(@RequestParam String id) {
-        return likesService.likeMe(id);
+    public Map<Object, Object> list(@RequestParam String id) {
+        return likesService.list(id);
     }
 }

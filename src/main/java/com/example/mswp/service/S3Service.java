@@ -23,7 +23,17 @@ public class S3Service {
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentLength(multipartFile.getSize());
         metadata.setContentType(multipartFile.getContentType());
+        System.out.println(multipartFile.getContentType());
+        metadata.setContentDisposition("inline");
 
-        amazonS3.putObject(bucket + "/" + folder, id + ".jpg", multipartFile.getInputStream(), metadata);
+        String extension;
+
+        if(multipartFile.getContentType().equals("image/png")) {
+            extension = ".png";
+        } else {
+            extension = ".jpg";
+        }
+
+        amazonS3.putObject(bucket + "/" + folder, id + extension, multipartFile.getInputStream(), metadata);
     }
 }

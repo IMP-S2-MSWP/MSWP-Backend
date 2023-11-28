@@ -59,11 +59,13 @@ public class UserController {
     }
 
     @PostMapping(value = "/upload", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public Map uploadImage(@RequestParam("id") String id, @RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
+    public Map uploadImage(@RequestParam("id") String id,
+                           @RequestParam(value = "file") MultipartFile file
+    ) throws IOException {
         return userService.uploadImage(id, file);
     }
 
-    @PostMapping("/change")
+    @PostMapping("/message")
     public Map<String, Integer> changeMessage(@RequestBody UserDto userDto) {
         return userService.changeMessage(userDto);
     }

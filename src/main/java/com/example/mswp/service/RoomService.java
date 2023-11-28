@@ -22,11 +22,6 @@ public class RoomService {
 
     @Autowired
     private final JpaRoomRepository jpaRoomRepository;
-    @Autowired
-    private final JpaUserRepository jpaUserRepository;
-
-    int number;
-
     Map<String, Object> res = new HashMap<>();
 
     // 사용자 id 기준 접속 가능한 방 목록
@@ -39,7 +34,6 @@ public class RoomService {
         }
         return jpaRoomRepository.myRoomList(roomDto.getId(),testlist);
         //return jpaRoomRepository.findByIdAndState(roomDto.getId(),roomDto.getState());
-
     }
 
     // 채팅방 생성

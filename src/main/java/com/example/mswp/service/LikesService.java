@@ -26,7 +26,7 @@ public class LikesService {
     private final RedisTemplate<String, String> redisTemplate;
 
     @Transactional
-    public Optional<Likes> clickLike(LikesDto likesDto) {
+    public Optional<Likes> click(LikesDto likesDto) {
 
         Optional<Likes> likes = jpalikesRepository.findByIdToAndIdFrom(likesDto.getIdTo(), likesDto.getIdFrom());
 
@@ -48,12 +48,12 @@ public class LikesService {
         return likes;
     }
 
-    public Map<String, List<Object>> countLike(String id) {
+    public Map<String, List<Likes>> count(String id) {
 
-        Map<String, List<Object>> res = new HashMap<>();
+        Map<String, List<Likes>> res = new HashMap<>();
 
         //like table의 idTo 값으로 idFrom 값 전부 가져오기
-        List<Object> list = jpalikesRepository.findByIdFromAndExpiredAtIsNull(id);
+        List<Likes> list = jpalikesRepository.findByIdFromAndExpiredAtIsNull(id);
 
         res.put("list", list);
 
@@ -61,7 +61,8 @@ public class LikesService {
 
     }
 
-    public Set<String> test(UserDto userDto) {
+    //나를 좋아요 하는 사람 배열로 반환
+    public Set<String> me(UserDto userDto) {
 
         //redis 저장을 위한 Set
         SetOperations<String, String> redisSet = redisTemplate.opsForSet();
@@ -94,16 +95,17 @@ public class LikesService {
         return members;
     }
 
-    public Map<Object, Object> likeMe(String id) {
+    public Map<Object, Object> list(String id) {
         Map<Object, Object> res = new HashMap<>();
 
-        List<Likes> user = jpalikesRepository.findByIdToAndExpiredAtIsNull(id);
+        List<Likes> user = jpalikesRepository.findByIdFromAndExpiredAtIsNull(id);
 
         if(user.isEmpty()) {
-            return null;
+            res.put("sc", 400);
+            res.put("message", "No Data");
         } else {
             for(int i = 0; i < user.size(); i++) {
-                res.put(i, jpaUserRepository.findById(user.get(i).getIdFrom()));
+                res.put(i, jpaUserRepository.findById(user.get(i).getIdTo()));
             }
         }
 

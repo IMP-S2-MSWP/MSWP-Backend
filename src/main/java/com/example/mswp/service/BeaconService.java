@@ -13,9 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 
 @Service
@@ -36,13 +33,20 @@ public class BeaconService {
                             Character gender,
                             MultipartFile file) throws IOException {
 
+        String extension;
+
+        if(file.getContentType().equals("image/png")) {
+            extension = ".png";
+        } else {
+            extension = ".jpg";
+        }
+
         Beacon beacon = jpaBeaconRepository.findUserByUuid(uuid);
 
         if (beacon == null) {
             // 기존 파일명 -> 사용자 ID로 변경하기 위함
-            String originalFilename = file.getOriginalFilename().replace(file.getOriginalFilename(), uuid + ".jpg");
+            String originalFilename = file.getOriginalFilename().replace(file.getOriginalFilename(), uuid + extension);
             s3Service.saveFile(uuid, "beacon", file);
-
 
             BeaconDto beaconDto = new BeaconDto();
 
@@ -133,30 +137,36 @@ public class BeaconService {
         return res;
     }
 
-    public Map uploadImage(String uuid, MultipartFile file) throws IOException {
+    public Map<String, Object> createAdvertisement(String uuid, String title, MultipartFile file) throws IOException {
 
-        Map<String, Integer> res = new HashMap<>();
+        String extension;
 
-        // 기존 파일명 -> 사용자 ID로 변경하기 위함
-        String originalFilename = file.getOriginalFilename().replace(file.getOriginalFilename(), uuid + ".jpg");
+        if(file.getContentType().equals("image/png")) {
+            extension = ".png";
+        } else {
+            extension = ".jpg";
+        }
 
-        Path filePath = Paths.get(".\\src\\main\\resources\\static\\images\\", originalFilename);
+        Beacon beacon = jpaBeaconRepository.findUserByUuid(uuid);
 
-        Files.createDirectories(filePath.getParent());
-        Files.write(filePath, file.getBytes());
+        if (beacon != null) {
+            // 기존 파일명 -> 사용자 ID로 변경하기 위함
+            String originalFilename = file.getOriginalFilename().replace(file.getOriginalFilename(), uuid + extension);
+            s3Service.saveFile(uuid, "advertisement", file);
 
-        Optional<Beacon> beacon = jpaBeaconRepository.findByUuid(uuid);
+            beacon.updateAdvertisementImage(title, originalFilename);
 
-        if (beacon.isPresent()) {
-            beacon.get().setImage(originalFilename);
-            jpaBeaconRepository.save(beacon.get());
+            jpaBeaconRepository.save(beacon);
             res.put("sc", 200);
         } else {
             res.put("sc", 400);
         }
-
         return res;
 
+    }
+
+    public Optional<Beacon> showAdvertisement(BeaconDto beaconDto) {
+        return jpaBeaconRepository.findByUuid(beaconDto.getUuid());
     }
 
 }

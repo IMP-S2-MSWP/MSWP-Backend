@@ -20,6 +20,7 @@ public class UserDto {
         private String uuid;
         private String image;
         private String message;
+        private String fcm;
 
         //여러 아이디 받기 위함 (uuid 기반 사용자 닉네임 제공)
         private List<String> uuidList;
@@ -36,6 +37,7 @@ public class UserDto {
                         .uuid(uuid)
                         .image(image)
                         .message(message)
+                        .fcm(fcm)
                         .build();
         }   
 

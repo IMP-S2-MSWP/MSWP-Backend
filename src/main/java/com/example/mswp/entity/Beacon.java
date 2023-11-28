@@ -3,6 +3,7 @@ package com.example.mswp.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 
 import java.time.LocalDateTime;
 
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 @Setter
+@DynamicUpdate
 public class Beacon {
 
     @Id
@@ -30,6 +32,12 @@ public class Beacon {
     @Column
     private String image;
 
+    @Column
+    private String title;
+
+    @Column(name = "advertisement_image")
+    private String advertisementImage;
+
     @Column(length = 60)
     private String beaconname;
 
@@ -44,4 +52,9 @@ public class Beacon {
 
     @Column(name = "expired_at", columnDefinition = "TIMESTAMP")
     private LocalDateTime expired_at;
+
+    public void updateAdvertisementImage(String title, String advertisementImage) {
+        this.title = title;
+        this.advertisementImage = advertisementImage;
+    }
 }

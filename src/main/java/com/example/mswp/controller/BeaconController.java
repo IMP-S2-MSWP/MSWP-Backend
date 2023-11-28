@@ -2,7 +2,6 @@ package com.example.mswp.controller;
 
 import com.example.mswp.dto.BeaconDto;
 import com.example.mswp.entity.Beacon;
-import com.example.mswp.entity.Room;
 import com.example.mswp.service.BeaconService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -12,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/beacon")
@@ -30,7 +30,6 @@ public class BeaconController {
                             @RequestParam("gender") Character gender,
                             @RequestParam("file") MultipartFile file
                             ) throws IOException {
-        System.out.println(file);
         return beaconService.createBeacon(uuid, creator, state, message, beaconname, gender, file);
     }
 
@@ -59,14 +58,27 @@ public class BeaconController {
         return beaconService.joinBeacon(beaconDto);
     };
 
-    @PostMapping("upload")
-    public Map uploadImage(@RequestParam("uuid") String uuid, @RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
-        return beaconService.uploadImage(uuid, file);
-    }
-
     @PostMapping("/update")
     public Map updateBeacon(@RequestBody BeaconDto beaconDto){
         return beaconService.updateBeacon(beaconDto);
     };
+
+    @PostMapping(value = "/advertisement", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public Map<String, Object> createAdvertisement(@RequestParam("uuid") String uuid,
+                                                   @RequestParam("title") String title,
+                                                   @RequestParam("file") MultipartFile file
+    ) throws IOException {
+        return beaconService.createAdvertisement(uuid, title, file);
+    }
+
+    @PostMapping("/show")
+    public Optional<Beacon> showAdvertisement(@RequestBody BeaconDto beaconDto) {
+        return beaconService.showAdvertisement(beaconDto);
+    }
+
+//    @PostMapping("upload")
+//    public Map uploadImage(@RequestParam("uuid") String uuid, @RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
+//        return beaconService.uploadImage(uuid, file);
+//    }
 
 }
