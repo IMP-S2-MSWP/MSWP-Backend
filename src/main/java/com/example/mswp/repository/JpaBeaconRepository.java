@@ -20,7 +20,7 @@ public interface JpaBeaconRepository extends JpaRepository<Beacon, String> {
     Optional<Beacon> findByUuid(String uuid);
 
     //test
-    @Query("SELECT b FROM Beacon b WHERE b.uuid IN (SELECT a.number  FROM Room a WHERE a.id = :roomId AND a.state = :state)")
-    List<Beacon> findBeaconsByRoomIdAndState(String roomId,Character state);
+    @Query("SELECT b FROM Beacon b WHERE b.uuid IN (SELECT a.number  FROM Room a WHERE a.id = :id AND a.state = :state)")
+    List<Beacon> findBeaconsByRoomIdAndState(String id,Character state);
 
 }

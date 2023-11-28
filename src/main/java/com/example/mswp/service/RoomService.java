@@ -1,6 +1,7 @@
 package com.example.mswp.service;
 
 import com.example.mswp.dto.RoomDto;
+import com.example.mswp.dto.RoomListDto;
 import com.example.mswp.entity.Room;
 import com.example.mswp.repository.JpaRoomRepository;
 import com.example.mswp.repository.JpaUserRepository;
@@ -24,8 +25,15 @@ public class RoomService {
     Map<String, Object> res = new HashMap<>();
 
     // 사용자 id 기준 접속 가능한 방 목록
-    public List<Room> roomList(RoomDto roomDto) {
-        return jpaRoomRepository.findByIdAndState(roomDto.getId(),roomDto.getState());
+    public List<RoomListDto> roomList(RoomDto roomDto) {
+        List<Room> roomlist = jpaRoomRepository.getById(roomDto.getId());
+        List<String> testlist = new ArrayList<>();
+        for (int i = 0 ; i < roomlist.size();i++){
+            testlist.add(roomlist.get(i).getNumber());
+            System.out.println(roomlist.get(i).getNumber());
+        }
+        return jpaRoomRepository.myRoomList(roomDto.getId(),testlist);
+        //return jpaRoomRepository.findByIdAndState(roomDto.getId(),roomDto.getState());
     }
 
     // 채팅방 생성
@@ -52,17 +60,21 @@ public class RoomService {
             }
 
             String orderUser = jpaRoomRepository.findIdsByNumberAndNotUserId(formatedNow,roomDto.getIdList().get(0));
+            String rname = jpaUserRepository.findNicknameById(orderUser);
             res.put("sc",201);
             res.put("number",formatedNow);
-            res.put("rname",orderUser);
+            res.put("id",orderUser);
+            res.put("rname",rname);
             return res;
         }
         else {
             String orderUser = jpaRoomRepository.findIdsByNumberAndNotUserId(roomId.get(0),roomDto.getIdList().get(0));
+            String rname = jpaUserRepository.findNicknameById(orderUser);
             System.out.println(orderUser);
             res.put("sc",200);
             res.put("number",roomId.get(0));
-            res.put("rname",orderUser);
+            res.put("id",orderUser);
+            res.put("rname",rname);
             return res;
         }
 

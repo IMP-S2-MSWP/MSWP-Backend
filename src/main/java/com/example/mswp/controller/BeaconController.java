@@ -38,7 +38,7 @@ public class BeaconController {
         return beaconService.myBeaconList(beaconDto);
     }
 
-    @PostMapping("/beaconlist")
+    @PostMapping("/list")
     public List<Beacon> beaconList (@RequestBody BeaconDto beaconDto){
         return beaconService.beaconList(beaconDto);
     }

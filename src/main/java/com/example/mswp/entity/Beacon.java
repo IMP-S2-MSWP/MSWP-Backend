@@ -47,6 +47,9 @@ public class Beacon {
     @Column(name = "create_at", columnDefinition = "TIMESTAMP")
     private LocalDateTime create_at;
 
+    @Column(name = "update_at", columnDefinition = "TIMESTAMP")
+    private LocalDateTime update_at;
+
     @Column(name = "expired_at", columnDefinition = "TIMESTAMP")
     private LocalDateTime expired_at;
 

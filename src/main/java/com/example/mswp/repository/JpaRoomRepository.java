@@ -1,6 +1,8 @@
 package com.example.mswp.repository;
 
 import com.example.mswp.entity.Room;
+import com.example.mswp.entity.User;
+import com.example.mswp.dto.RoomListDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -28,4 +30,9 @@ public interface JpaRoomRepository extends JpaRepository<Room, Integer> {
 
 
     Room findByNumberAndId(String number, String userId);
+    @Query("SELECT new com.example.mswp.dto.RoomListDto(r.number, r.id, u.nickname) FROM Room r JOIN User u ON r.id = u.id WHERE r.id != :id and r.number in :rids")
+    List<RoomListDto> myRoomList(@Param("id") String id,@Param("rids") List<String> rids);
+
+
+
 }
