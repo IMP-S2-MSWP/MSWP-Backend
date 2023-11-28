@@ -49,4 +49,7 @@ public class User {
     @Column(length = 60)
     private String message;
 
+    @Column
+    private String fcm;
+
 }

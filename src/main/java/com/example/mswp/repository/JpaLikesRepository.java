@@ -12,7 +12,7 @@ public interface JpaLikesRepository extends JpaRepository<Likes, Integer> {
 
     Optional<Likes> findByIdToAndIdFrom(String idTo, String idFrom);
 
-    List<Object> findByIdFromAndExpiredAtIsNull(String id);
+    List<Likes> findByIdFromAndExpiredAtIsNull(String id);
 
     List<Likes> findByIdToAndExpiredAtIsNull(String id);
 

@@ -107,11 +107,19 @@ public class UserService {
 
         Map<String, Integer> res = new HashMap<>();
 
+        String extension;
+
+        if(file.getContentType().equals("image/png")) {
+            extension = ".png";
+        } else {
+            extension = ".jpg";
+        }
+
         Optional<User> user = jpaUserRepository.findById(id);
 
         if (user.isPresent()) {
             // 기존 파일명 -> 사용자 ID로 변경하기 위함
-            String originalFilename = file.getOriginalFilename().replace(file.getOriginalFilename(), id + ".jpg");
+            String originalFilename = file.getOriginalFilename().replace(file.getOriginalFilename(), id + extension);
             s3Service.saveFile(id, "user", file);
             user.get().setImage(originalFilename);
             jpaUserRepository.save(user.get());
