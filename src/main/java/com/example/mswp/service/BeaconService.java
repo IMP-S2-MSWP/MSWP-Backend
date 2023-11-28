@@ -67,7 +67,7 @@ public class BeaconService {
 
 
     public List<Beacon> beaconList(BeaconDto beaconDto) {
-        List<Beacon> test = jpaBeaconRepository.findBeaconsByRoomIdAndState(beaconDto.getCreator(),beaconDto.getState());
+        List<Beacon> test = jpaBeaconRepository.findBeaconsByRoomIdAndState(beaconDto.getId(),beaconDto.getState());
         return test;
         //return jpaRoomRepository.getByIdAndState(beaconDto.getId(),beaconDto.getState());
     }
@@ -90,13 +90,12 @@ public class BeaconService {
     }
 
     public Map joinBeacon(BeaconDto beaconDto){
-        Room room = jpaRoomRepository.findByNumberAndId(beaconDto.getUuid(),beaconDto.getCreator());
+        Room room = jpaRoomRepository.findByNumberAndId(beaconDto.getUuid(),beaconDto.getId());
         if(room == null){
             List<String> myList = new ArrayList<>();
-            myList.add(beaconDto.getCreator());
+            myList.add(beaconDto.getId());
             RoomDto roomDto = new RoomDto();
             roomDto.setNumber(beaconDto.getUuid());
-            roomDto.setId(beaconDto.getCreator());
             roomDto.setIdList(myList);
             roomDto.setState(beaconDto.getState());
 

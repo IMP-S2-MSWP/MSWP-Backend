@@ -21,7 +21,7 @@ public class BeaconDto {
     private Character gender;
 
     private List<String> uuidList;
-
+    private String id;
     public Beacon toEntity() {
         return Beacon.builder()
                 .uuid(uuid)
@@ -32,6 +32,7 @@ public class BeaconDto {
                 .beaconname(beaconname)
                 .gender(gender)
                 .create_at(LocalDateTime.now())
+                .update_at(LocalDateTime.now())
                 .build();
     }
 

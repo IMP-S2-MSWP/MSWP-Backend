@@ -1,6 +1,7 @@
 package com.example.mswp.controller;
 
 import com.example.mswp.dto.RoomDto;
+import com.example.mswp.dto.RoomListDto;
 import com.example.mswp.entity.Room;
 import com.example.mswp.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ public class RoomController {
     private RoomService roomService;
 
     @PostMapping("/list")
-    public List<Room> roomList(@RequestBody RoomDto roomDto) {
+    public List<RoomListDto> roomList(@RequestBody RoomDto roomDto) {
         return roomService.roomList(roomDto);
     }
 
