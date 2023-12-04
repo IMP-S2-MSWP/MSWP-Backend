@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -15,7 +16,6 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.slf4j.Logger;
-import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api")
@@ -26,7 +26,6 @@ public class UserController {
     private UserService userService;
 
     private Logger logger = LoggerFactory.getLogger(UserController.class);
-
 
     @PostMapping("/login")
     public Optional<User> login(@RequestBody UserDto userDto) {
@@ -39,8 +38,8 @@ public class UserController {
     }
 
     @PostMapping("/main")
-    public Optional<User> main(@RequestBody UserDto userDto) {
-        return userService.main(userDto);
+    public Optional<User> home(@RequestBody UserDto userDto) {
+        return userService.home(userDto);
     }
 
     @PostMapping("/around")
@@ -61,7 +60,7 @@ public class UserController {
     @PostMapping(value = "/upload", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public Map uploadImage(@RequestParam("id") String id,
                            @RequestParam(value = "file") MultipartFile file
-    ) throws IOException {
+                           ) throws IOException {
         return userService.uploadImage(id, file);
     }
 

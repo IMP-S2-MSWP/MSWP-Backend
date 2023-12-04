@@ -20,7 +20,6 @@ public class LikesController {
     @Autowired
     private LikesService likesService;
 
-
     @PostMapping("/click")
     public Optional<Likes> click(@RequestBody LikesDto likesDto) {
         return likesService.click(likesDto);

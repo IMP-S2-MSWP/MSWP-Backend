@@ -38,32 +38,33 @@ public class UserService {
     }
 
     //Password를 제외한 사용자 data 추출
-    public Optional<User> main(UserDto userDto) {
-
+    public Optional<User> home(UserDto userDto) {
         return jpaUserRepository.findById(userDto.getId());
     }
 
     //bluetooth id로 주변 사용자 nickname 조회
     public Map<Object, Object> around(UserDto userDto) {
-        Map<Object, Object> user = new HashMap<>();
+        Map<Object, Object> res = new HashMap<>();
 
+        //uuid list의 지정된 단어로 시작하는 uuid의 사용자 추출
         for (int i = 0; i < userDto.getUuidList().size(); i++) {
             if (userDto.getUuidList().get(i).startsWith("bc2")) {
-                user.put(Integer.parseInt(String.valueOf(i)) + 1, jpaUserRepository.findUserByUuid(userDto.getUuidList().get(i)));
+                res.put(Integer.parseInt(String.valueOf(i)) + 1, jpaUserRepository.findUserByUuid(userDto.getUuidList().get(i)));
             } else {
-                user.put(Integer.parseInt(String.valueOf(i)) + 1, jpaBeaconRepository.findUserByUuid(userDto.getUuidList().get(i)));
+                res.put(Integer.parseInt(String.valueOf(i)) + 1, jpaBeaconRepository.findUserByUuid(userDto.getUuidList().get(i)));
             }
         }
 
-        if(user.isEmpty()) {
-            user.put("sc", 400);
+        if(res.isEmpty()) {
+            res.put("sc", 400);
         } else {
-            user.put("sc", 200);
+            res.put("sc", 200);
         }
 
-        return user;
+        return res;
     }
 
+    //회원가입
     public String register(UserDto userDto) {
 
         StringBuilder uuid = new StringBuilder();
@@ -92,7 +93,8 @@ public class UserService {
 
     //아이디 중복 확인
     public Map<String, Integer> idValidation(UserDto userDto) {
-        //상태 코드 res
+
+        // res 반환
         Map<String, Integer> res = new HashMap<>();
         // 중복 ID 찾기
         Optional<User> user = jpaUserRepository.findById(userDto.getId());
@@ -105,8 +107,9 @@ public class UserService {
     // 사용자 이미지 변경
     public Map uploadImage(String id, MultipartFile file) throws IOException {
 
+        //반환 데이터 res
         Map<String, Integer> res = new HashMap<>();
-
+        //이미지 변경할 사용자
         Optional<User> user = jpaUserRepository.findById(id);
 
         if (user.isPresent()) {
@@ -124,10 +127,11 @@ public class UserService {
         return res;
     }
 
+    //상태 메세지 변경
     public Map<String, Integer> changeMessage(UserDto userDto) {
-
+        //반환 데이터 res
         Map<String, Integer> res = new HashMap<>();
-
+        //메세지 변경할 사용자
         User user = jpaUserRepository.findById(userDto.getId()).orElse(null);
 
         if(user != null) {

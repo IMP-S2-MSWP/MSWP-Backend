@@ -12,7 +12,6 @@ import java.util.Optional;
 
 @Repository
 public interface JpaBeaconRepository extends JpaRepository<Beacon, String> {
-    //Beacon getById(String user);
 
     List<Beacon> findByCreator(String creator);
 

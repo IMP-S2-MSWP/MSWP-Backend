@@ -2,7 +2,6 @@ package com.example.mswp.controller;
 
 import com.example.mswp.dto.RoomDto;
 import com.example.mswp.dto.RoomListDto;
-import com.example.mswp.entity.Room;
 import com.example.mswp.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

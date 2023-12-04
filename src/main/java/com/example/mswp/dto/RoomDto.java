@@ -1,15 +1,15 @@
 package com.example.mswp.dto;
 
 import com.example.mswp.entity.Room;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class RoomDto {
 
     private int sequence;

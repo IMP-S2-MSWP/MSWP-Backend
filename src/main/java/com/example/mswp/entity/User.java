@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 
 import java.util.Date;
 
@@ -17,6 +18,7 @@ import java.util.Date;
 @Getter // 각 Field의 Value를 조회할 수 있는 Getter 자동 생성
 @Setter
 @ToString // 해당 Class에 선언된 Field를 모두 출력할 수 있는 toString() 자동 생성
+@DynamicUpdate // DTO로 들어온 값만 찾아서 update를 할 수 있게 해줌
 public class User {
 
     @Id // Entity의 PK가 될 Value 지정, 만약 @GeneratedValue 사용 시 auto_increment 사용 가능
