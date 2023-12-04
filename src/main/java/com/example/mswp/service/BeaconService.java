@@ -9,6 +9,7 @@ import com.example.mswp.repository.JpaRoomRepository;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,12 +20,16 @@ import java.util.*;
 @RequiredArgsConstructor
 public class BeaconService {
 
+    @Autowired
     private final S3Service s3Service;
+    @Autowired
     private final JpaBeaconRepository jpaBeaconRepository;
+    @Autowired
     private final JpaRoomRepository jpaRoomRepository;
 
     Map<String, Object> res = new HashMap<>();
 
+    //Beacon 등록
     public Map createBeacon(String uuid,
                             String creator,
                             Character state,
@@ -57,18 +62,18 @@ public class BeaconService {
         }
         return res;
     }
+
+    // 내가 등록한 Beacon
     public List<Beacon> myBeaconList (BeaconDto beaconDto) {
         return jpaBeaconRepository.findByCreator(beaconDto.getCreator());
     }
 
-
+    //
     public List<Beacon> beaconList(BeaconDto beaconDto) {
         List<Beacon> test = jpaBeaconRepository.findBeaconsByRoomIdAndState(beaconDto.getId(),beaconDto.getState());
         return test;
-        //return jpaRoomRepository.getByIdAndState(beaconDto.getId(),beaconDto.getState());
     }
-
-    //얼츄완료
+    
     public Map<Object, Object> around(BeaconDto beaconDto) {
         Map<Object, Object> beacon = new HashMap<>();
 
@@ -85,6 +90,7 @@ public class BeaconService {
         return beacon;
     }
 
+    // Beacon 참가
     public Map joinBeacon(BeaconDto beaconDto){
         Room room = jpaRoomRepository.findByNumberAndId(beaconDto.getUuid(),beaconDto.getId());
         if(room == null){
@@ -129,6 +135,7 @@ public class BeaconService {
         return res;
     }
 
+    // 비콘 광고 등록
     public Map<String, Object> createAdvertisement(String uuid, String title, MultipartFile file) throws IOException {
 
         Beacon beacon = jpaBeaconRepository.findUserByUuid(uuid);
@@ -149,6 +156,7 @@ public class BeaconService {
 
     }
 
+    // 비콘 광고 노출
     public Optional<Beacon> showAdvertisement(BeaconDto beaconDto) {
         return jpaBeaconRepository.findByUuid(beaconDto.getUuid());
     }

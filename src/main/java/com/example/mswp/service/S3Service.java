@@ -18,6 +18,7 @@ public class S3Service {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
+    //S3에 이미지 저장
     public void saveFile(String id, String folder, MultipartFile multipartFile) throws IOException {
 
         ObjectMetadata metadata = new ObjectMetadata();

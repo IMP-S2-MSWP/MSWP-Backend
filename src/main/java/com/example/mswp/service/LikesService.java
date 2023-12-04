@@ -25,9 +25,11 @@ public class LikesService {
     private final JpaUserRepository jpaUserRepository;
     private final RedisTemplate<String, String> redisTemplate;
 
+    //상대방 좋아요 누르기
     @Transactional
     public Optional<Likes> click(LikesDto likesDto) {
 
+        //좋아요 상태 변화를 위한 데이터
         Optional<Likes> likes = jpalikesRepository.findByIdToAndIdFrom(likesDto.getIdTo(), likesDto.getIdFrom());
 
         //likes 가져오고 expired_at이 Null인 경우
@@ -48,8 +50,9 @@ public class LikesService {
         return likes;
     }
 
+    //나를 좋아요 하는 사람 수
     public Map<String, List<Likes>> count(String id) {
-
+        //반환 데이터 res
         Map<String, List<Likes>> res = new HashMap<>();
 
         //like table의 idTo 값으로 idFrom 값 전부 가져오기
@@ -58,7 +61,6 @@ public class LikesService {
         res.put("list", list);
 
         return res;
-
     }
 
     //나를 좋아요 하는 사람 배열로 반환
@@ -68,6 +70,7 @@ public class LikesService {
         SetOperations<String, String> redisSet = redisTemplate.opsForSet();
         //return하기 위한 Set (key로 Value 전체 가져옴)
         Set<String> members;
+        //좋아요 list
         List<Likes> likes = jpalikesRepository.findByIdToAndExpiredAtIsNull(userDto.getId());
 
         //List가 비어있는 경우
@@ -78,6 +81,7 @@ public class LikesService {
 
             members = redisSet.members(key);
 
+            //redis에 해당 키 값이 있는 경우
             if (redisSet.getOperations().hasKey(key)) {
                 redisSet.remove(key, members.toArray());
                 members.clear();
@@ -86,7 +90,7 @@ public class LikesService {
                 redisSet.add(key, likes.get(i).getIdFrom());
             }
 
-            //redis 저장된 Set의 Key 기준 expire timeout 30minutes 설정
+            //redis 저장된 Set의 Key 기준 expire timeout 10m 설정
             redisTemplate.expire(key, 600, TimeUnit.SECONDS);
 
             members = redisSet.members(key);
@@ -95,9 +99,11 @@ public class LikesService {
         return members;
     }
 
+    //내가 좋아요 누른 사람 list
     public Map<Object, Object> list(String id) {
+        //반환 데이터 res
         Map<Object, Object> res = new HashMap<>();
-
+        //ID 기준 내가 좋아요 누른 사람 조회
         List<Likes> user = jpalikesRepository.findByIdFromAndExpiredAtIsNull(id);
 
         if(user.isEmpty()) {

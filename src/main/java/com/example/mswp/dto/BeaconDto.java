@@ -28,6 +28,7 @@ public class BeaconDto {
 
     private List<String> uuidList;
     private String id;
+
     public Beacon toEntity() {
         return Beacon.builder()
                 .uuid(uuid)

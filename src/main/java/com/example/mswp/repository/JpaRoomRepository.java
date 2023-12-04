@@ -13,7 +13,6 @@ import java.util.List;
 @Repository
 public interface JpaRoomRepository extends JpaRepository<Room, Integer> {
 
-    List<Room> getById(String user);
     //Entity id String
     List<Room> findByIdAndState(String user,Character state);
 

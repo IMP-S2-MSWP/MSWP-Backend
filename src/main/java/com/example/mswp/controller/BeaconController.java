@@ -67,7 +67,7 @@ public class BeaconController {
     public Map<String, Object> createAdvertisement(@RequestParam("uuid") String uuid,
                                                    @RequestParam("title") String title,
                                                    @RequestParam("file") MultipartFile file
-    ) throws IOException {
+                                                   ) throws IOException {
         return beaconService.createAdvertisement(uuid, title, file);
     }
 
@@ -75,10 +75,5 @@ public class BeaconController {
     public Optional<Beacon> showAdvertisement(@RequestBody BeaconDto beaconDto) {
         return beaconService.showAdvertisement(beaconDto);
     }
-
-//    @PostMapping("upload")
-//    public Map uploadImage(@RequestParam("uuid") String uuid, @RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
-//        return beaconService.uploadImage(uuid, file);
-//    }
 
 }
