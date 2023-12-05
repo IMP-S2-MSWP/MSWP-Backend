@@ -29,7 +29,7 @@ public interface JpaRoomRepository extends JpaRepository<Room, Integer> {
 
 
     Room findByNumberAndId(String number, String userId);
-    @Query("SELECT new com.example.mswp.dto.RoomListDto(r.number, r.id, u.nickname) FROM Room r JOIN User u ON r.id = u.id WHERE r.id != :id and r.number in :rids")
+    @Query("SELECT new com.example.mswp.dto.RoomListDto(r.number, r.id, u.nickname) FROM Room r JOIN User u ON r.id = u.id WHERE r.id != :id and r.number in :rids ORDER BY r.update_at DESC")
     List<RoomListDto> myRoomList(@Param("id") String id,@Param("rids") List<String> rids);
 
 

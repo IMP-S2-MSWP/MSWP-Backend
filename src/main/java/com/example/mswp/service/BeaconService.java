@@ -70,8 +70,7 @@ public class BeaconService {
 
     //
     public List<Beacon> beaconList(BeaconDto beaconDto) {
-        List<Beacon> test = jpaBeaconRepository.findBeaconsByRoomIdAndState(beaconDto.getId(),beaconDto.getState());
-        return test;
+        return jpaBeaconRepository.findBeaconsByRoomIdAndState(beaconDto.getId(),beaconDto.getState());;
     }
     
     public Map<Object, Object> around(BeaconDto beaconDto) {
